@@ -4,8 +4,8 @@ import socket               # Import socket module
 import re
 
 s = socket.socket()         # Create a socket object
-#host = input("Host: ")
-host = "127.0.0.1"
+host = input("Host: ")
+#host = "127.0.0.1"
 port = 1234                # Reserve a port for your service.
 
 s.connect((host, port))
