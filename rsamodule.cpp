@@ -1,67 +1,23 @@
 #define PY_SSIZE_T_CLEAN
-#include <Python.h>
-#include <gmp.h> //On inclut la bibliothèque gmp
+#include <python3.7/Python.h>
+#include <vector>
+#include <gmp.h>
 #include <gmpxx.h>
-#include <random>
-#include <iostream>
-#include <string>
+#include "rsa.h"
 
-#define KEYSIZE 2048
+#define KEYSIZE 4096
 
 static PyObject *
 rsa_generateKey(PyObject *self, PyObject *args)
 {
-    //Generate p and q primes
-    mpz_class p, q;
-    std::random_device rd;
-    gmp_randclass rand(gmp_randinit_mt);
-    rand.seed(rd());
-    p = rand.get_z_bits(KEYSIZE);
-    mpz_nextprime(p.get_mpz_t(), p.get_mpz_t());
-    do {
-        q = rand.get_z_bits(KEYSIZE);
-        mpz_nextprime(q.get_mpz_t(), q.get_mpz_t());
-    } while(p == q);
-
-    //Calculate n and m
-    mpz_class n(p * q);
-
-    mpz_class m(p - 1), qminus1(q - 1);
-    mpz_lcm(m.get_mpz_t(), m.get_mpz_t(), qminus1.get_mpz_t());
-
-    //Set e
-    mpz_class e(65537);
-
-    //Calculate everything else
-    mpz_class gcd, u, v;
-    mpz_gcdext(gcd.get_mpz_t(), u.get_mpz_t(), v.get_mpz_t(), e.get_mpz_t(), m.get_mpz_t());
-
-    //If u < 2
-    if(u < 2) {
-        mpz_class k(2);
-        k -= u;
-        m = -m;
-        mpz_fdiv_q(k.get_mpz_t(), k.get_mpz_t(), m.get_mpz_t());
-        m = -m;
-        k *= m;
-        u -= k;
-    }
-    if(u > m) {
-        mpz_class k;
-        k = m - u;
-        m = -m;
-        mpz_fdiv_q(k.get_mpz_t(), k.get_mpz_t(), m.get_mpz_t());
-        m = -m;
-        k *= m;
-        u -= k;
-    }
+    std::vector<mpz_class> key = generateKey(KEYSIZE);
 
     PyObject* tuple;
     tuple = Py_BuildValue(
         "(NNN)",
-        PyBytes_FromString(mpz_get_str(NULL, 16, n.get_mpz_t())),
-        PyBytes_FromString(mpz_get_str(NULL, 16, e.get_mpz_t())),
-        PyBytes_FromString(mpz_get_str(NULL, 16, u.get_mpz_t()))
+        PyBytes_FromString(key[0].get_str(16).c_str()),
+        PyBytes_FromString(key[1].get_str(16).c_str()),
+        PyBytes_FromString(key[2].get_str(16).c_str())
     );
 
     return tuple;
@@ -78,9 +34,9 @@ rsa_encrypt(PyObject *self, PyObject *args) {
     exp.set_str(expStr, 16);
     mod.set_str(modStr, 16);
 
-    mpz_powm(text.get_mpz_t(), text.get_mpz_t(), exp.get_mpz_t(), mod.get_mpz_t());
+    mpz_class cypher = encrypt(text, exp, mod);
 
-    return PyBytes_FromString(text.get_str(16).c_str());
+    return PyBytes_FromString(cypher.get_str(16).c_str());
 }
 
 static PyObject*
@@ -94,7 +50,7 @@ static PyMethodDef RSAMethods[] = {
     {"encrypt", rsa_encrypt, METH_VARARGS,
      "Encrypt a string."},
      {"decrypt", rsa_decrypt, METH_VARARGS,
-      "Decrypt an encrypted list."},
+      "Decrypt an encrypted string."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 

@@ -6,7 +6,7 @@
 #include <string>
 #include "rsa.h"
 
-std::vector<mpz_class> generateKeys(int size) {
+std::vector<mpz_class> generateKey(int size) {
     std::random_device dev;
     gmp_randclass r(gmp_randinit_mt);
     r.seed(dev());
@@ -28,13 +28,13 @@ std::vector<mpz_class> generateKeys(int size) {
 
     mpz_invert(d.get_mpz_t(), e.get_mpz_t(), m.get_mpz_t());
 
-    mpz_class dp, dq, qinv;
+    /*mpz_class dp, dq, qinv;
     dp = d % mpz_class(p-1);
     dq = d % mpz_class(q-1);
-    mpz_invert(qinv.get_mpz_t(), q.get_mpz_t(), p.get_mpz_t());
+    mpz_invert(qinv.get_mpz_t(), q.get_mpz_t(), p.get_mpz_t());*/
 
 
-    std::vector<mpz_class> array = {n, e, d, p, q, m, dp, dq, qinv};
+    std::vector<mpz_class> array = {n, e, d/*, p, q, dp, dq, qinv*/};
     return array;
 }
 
@@ -43,7 +43,7 @@ mpz_class encrypt(mpz_class number, mpz_class exp, mpz_class mod) {
     return number;
 }
 
-mpz_class decrypt(mpz_class number, mpz_class p, mpz_class q, mpz_class dp, mpz_class dq, mpz_class qinv) {
+mpz_class decrypt_chinese(mpz_class number, mpz_class p, mpz_class q, mpz_class dp, mpz_class dq, mpz_class qinv) {
     mpz_class m1, m2, h, m;
     mpz_powm(m1.get_mpz_t(), number.get_mpz_t(), dp.get_mpz_t(), p.get_mpz_t());
     mpz_powm(m2.get_mpz_t(), number.get_mpz_t(), dq.get_mpz_t(), q.get_mpz_t());
@@ -52,27 +52,6 @@ mpz_class decrypt(mpz_class number, mpz_class p, mpz_class q, mpz_class dp, mpz_
     return m;
 }
 
-int main(int argc, char const *argv[]) {
-    std::vector<mpz_class> key;
-    key = generateKeys(4096);
-    char letter;
-
-    std::string parts[] = {"n", "e", "d", "p", "q", "m", "dp", "dq", "qinv"};
-    for (size_t i = 0; i < 9; i++) {
-        std::cout << parts[i] << ": " << key[i].get_str() << std::endl;
-    }
-
-    std::cout << "Lettre : ";
-    std::cin >> letter;
-
-    mpz_class clear = letter;
-    mpz_class cypher, newclear;
-    cypher = encrypt(clear, key[1], key[0]);
-    newclear = decrypt(cypher, key[3], key[4], key[6], key[7], key[8]);
-
-    std::cout << "Clear : " << clear.get_str(10) << std::endl;
-    std::cout << "Cypher : " << cypher.get_str(10) << std::endl;
-    std::cout << "New clear : " << (char)newclear.get_ui() << std::endl;
-
-    return 0;
+mpz_class decrypt(mpz_class number, mpz_class exp, mpz_class mod) {
+    return encrypt(number, exp, mod);
 }

@@ -1,7 +1,7 @@
 from distutils.core import setup, Extension
 
 rsamodule = Extension('rsa',
-                    sources = ['rsamodule.cpp'],
+                    sources = ['rsamodule.cpp', 'rsa.cpp'],
                     libraries = ['gmp', 'gmpxx']
                     )
 
