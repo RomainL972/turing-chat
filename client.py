@@ -2,11 +2,13 @@
 
 import socket               # Import socket module
 import re
+import rsaBackend
 
 s = socket.socket()         # Create a socket object
-host = input("Host: ")
-#host = "127.0.0.1"
+#host = input("Host: ")
+host = "127.0.0.1"
 port = 1234                # Reserve a port for your service.
+key = rsaBackend.getKey()
 
 s.connect((host, port))
 print("Connected to", s.getpeername())
@@ -24,19 +26,21 @@ while True:
         elif(command == "nick"):
             if(arg == None):
                 print("No nickname provided")
+                text = None
             else:
-                s.send(bytearray("/nick " + arg, "utf-8"))
+                text = "/nick " + arg
                 print("Nickname changed")
         elif(command == "help"):
+            text = None
             print("Available Commands:")
             print("/quit: Quit the app")
             print("/help: Show this page")
             print("/nick <nickname>: Change nickname")
         else:
+            text = None
             print("Unknown Command")
-
-    else:
-        text = bytearray(text, "utf-8")
+    if(text):
+        text = rsaBackend.encryptText(key, text)
         s.send(text)
 #s.sendall("Je suis content")
 s.close()                     # Close the socket when done

@@ -15,9 +15,9 @@ rsa_generateKey(PyObject *self, PyObject *args)
     PyObject* tuple;
     tuple = Py_BuildValue(
         "(NNN)",
-        PyBytes_FromString(key[0].get_str(16).c_str()),
-        PyBytes_FromString(key[1].get_str(16).c_str()),
-        PyBytes_FromString(key[2].get_str(16).c_str())
+        PyUnicode_FromString(key[0].get_str(16).c_str()),
+        PyUnicode_FromString(key[1].get_str(16).c_str()),
+        PyUnicode_FromString(key[2].get_str(16).c_str())
     );
 
     return tuple;
@@ -26,7 +26,7 @@ rsa_generateKey(PyObject *self, PyObject *args)
 static PyObject*
 rsa_encrypt(PyObject *self, PyObject *args) {
     char *textStr, *expStr, *modStr;
-    if (!PyArg_ParseTuple(args, "sss", &expStr, &modStr, &textStr))
+    if (!PyArg_ParseTuple(args, "ssy", &expStr, &modStr, &textStr))
         return NULL;
 
     mpz_class exp, mod, text;

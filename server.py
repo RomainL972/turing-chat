@@ -2,12 +2,14 @@
 
 import socket
 import re
+import rsaBackend
 
 s = socket.socket()         # Create a socket object
 host = "0.0.0.0" # Get local machine name
 port = 1234                 # Reserve a port for your service.
 s.bind((host, port))        # Bind to the port
 print("Listening on",host,"on port",port)
+key = rsaBackend.getKey()
 
 s.listen(1)                 # Now wait for client connection.
 while True:
@@ -15,9 +17,9 @@ while True:
    print('Got connection from', addr)
    username = addr
    while True:
-       text = c.recv(1024)
+       text = c.recv(8192)
        if not text: break
-       text = text.decode('utf-8', 'ignore')
+       text = rsaBackend.decryptText(key, text)
        regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", text)
        if(regex):
            command = regex.group(1)

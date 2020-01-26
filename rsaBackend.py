@@ -3,12 +3,13 @@ import rsa
 import json
 import os
 import sys
+import binascii
 
 def createKey():
     try:
         f = open("privkey.json", "w")
         tuple = rsa.generateKey()
-        key = {"n": tuple[0].decode(), "e": tuple[1].decode(), "d": tuple[2].decode()}
+        key = {"n": tuple[0], "e": tuple[1], "d": tuple[2]}
         f.write(json.dumps(key))
     except:
         print("An error occured during the key generation")
@@ -34,3 +35,11 @@ def getKey():
     else:
         key = createkey()
     return key
+
+def encryptText(key, text):
+    hexa = binascii.hexlify(text.encode())
+    return rsa.encrypt(key["e"], key["n"], hexa)
+
+def decryptText(key, cypher):
+    hexa = rsa.decrypt(key["d"], key["n"], cypher)
+    return binascii.unhexlify(hexa).decode()
