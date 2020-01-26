@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
 import rsa
 import time
+import binascii
+import json
+
+try:
+    f = open("privkey.json")
+    key = json.load(f)
+    f.close()
+except FileNotFoundError:
+    f = open("privkey.json", "w")
+    tuple = rsa.generateKey()
+    key = {"n": tuple[0].decode(), "e": tuple[1].decode(), "d": tuple[2].decode()}
+    print(key)
+    f.write(json.dumps(key))
+    f.close()
 
 input = input("What do you want to encrypt? ")
-newInput = ""
-for char in input:
-    newInput += str(ord(char))
-print(newInput)
-input = hex(int(newInput))[2:]
+input = binascii.hexlify(input.encode()).decode()
 
-begin = time.perf_counter()
-myTuple = rsa.generateKey()
-timeGenerate = time.perf_counter() - begin
-n = myTuple[0].decode()
-e = myTuple[1].decode()
-d = myTuple[2].decode()
+n = key["n"]
+e = key["e"]
+d = key["d"]
 
 begin = time.perf_counter()
 encrypted = rsa.encrypt(e, n, input)
@@ -24,12 +31,8 @@ begin = time.perf_counter()
 decrypted = rsa.decrypt(d, n, encrypted.decode())
 timeDecrypt = time.perf_counter() - begin
 
-#decrypted = int(decrypted, 16)
-#output = ""
-#for char in decrypt:
-#    output += chr()
+decrypted = binascii.unhexlify(decrypted).decode()
 
-print("Result:",int(decrypted, 16))
-print("Generate keys:", timeGenerate,"s")
+print("Result:",decrypted)
 print("Encrypt:", timeEncrypt,"s")
 print("Decrypt:", timeDecrypt,"s")

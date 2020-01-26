@@ -6,7 +6,7 @@
 #include <string>
 #include "rsa.h"
 
-std::vector<mpz_class> generateKey(int size) {
+std::vector<mpz_class> generateKey(int size, bool chinese) {
     std::random_device dev;
     gmp_randclass r(gmp_randinit_mt);
     r.seed(dev());
@@ -28,13 +28,18 @@ std::vector<mpz_class> generateKey(int size) {
 
     mpz_invert(d.get_mpz_t(), e.get_mpz_t(), m.get_mpz_t());
 
-    /*mpz_class dp, dq, qinv;
-    dp = d % mpz_class(p-1);
-    dq = d % mpz_class(q-1);
-    mpz_invert(qinv.get_mpz_t(), q.get_mpz_t(), p.get_mpz_t());*/
+    std::vector<mpz_class> array;
+    if(chinese) {
+        mpz_class dp, dq, qinv;
+        dp = d % mpz_class(p-1);
+        dq = d % mpz_class(q-1);
+        mpz_invert(qinv.get_mpz_t(), q.get_mpz_t(), p.get_mpz_t());
+        array = {n, e, d, p, q, dp, dq, qinv};
+    }
+    else {
+        array = {n, e, d};
+    }
 
-
-    std::vector<mpz_class> array = {n, e, d/*, p, q, dp, dq, qinv*/};
     return array;
 }
 
