@@ -56,7 +56,7 @@ static PyMethodDef RSAMethods[] = {
 
 static struct PyModuleDef rsamodule = {
     PyModuleDef_HEAD_INIT,
-    "rsa",   /* name of module */
+    "librsa",   /* name of module */
     NULL, /* module documentation, may be NULL */
     -1,       /* size of per-interpreter state of the module,
                  or -1 if the module keeps state in global variables. */
@@ -64,7 +64,7 @@ static struct PyModuleDef rsamodule = {
 };
 
 PyMODINIT_FUNC
-PyInit_rsa(void)
+PyInit_librsa(void)
 {
     return PyModule_Create(&rsamodule);
 }
