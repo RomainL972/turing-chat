@@ -3,18 +3,9 @@ import rsa
 import time
 import binascii
 import json
+import rsaBackend
 
-try:
-    f = open("privkey.json")
-    key = json.load(f)
-    f.close()
-except FileNotFoundError:
-    f = open("privkey.json", "w")
-    tuple = rsa.generateKey()
-    key = {"n": tuple[0].decode(), "e": tuple[1].decode(), "d": tuple[2].decode()}
-    print(key)
-    f.write(json.dumps(key))
-    f.close()
+key = rsaBackend.getKey()
 
 input = input("What do you want to encrypt? ")
 input = binascii.hexlify(input.encode()).decode()
