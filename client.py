@@ -2,7 +2,7 @@
 
 import socket               # Import socket module
 import re
-import rsaBackend
+import backend as rsaBackend
 
 s = socket.socket()         # Create a socket object
 #host = input("Host: ")
@@ -41,6 +41,7 @@ while True:
             print("Unknown Command")
     if(text):
         text = rsaBackend.encryptText(key, text)
+        text += "\n".encode()
         s.send(text)
 #s.sendall("Je suis content")
 s.close()                     # Close the socket when done
