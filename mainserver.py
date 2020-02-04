@@ -17,9 +17,9 @@ class SocketServer(Thread):
 
         self.upnp = miniupnpc.UPnP()
         self.upnp.discoverdelay = 10
-        self.upnp.discover()
-        self.upnp.selectigd()
-        self.upnp.addportmapping(port, 'TCP', self.upnp.lanaddr, port, 'Hitler', '')
+        if(self.upnp.discover() > 0):
+            self.upnp.selectigd()
+            self.upnp.addportmapping(port, 'TCP', self.upnp.lanaddr, port, 'Hitler', '')
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
