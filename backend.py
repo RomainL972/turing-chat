@@ -44,10 +44,28 @@ def getKey():
         key = createKey()
     return key
 
+def padText(hexa):
+    result = []
+    for i in range(0, len(hexa),7):
+        result.append(hexa[i:i+7])
+    return result
+
+def unpadText(list):
+    result = ""
+    for part in list:
+        result += part
+    return result
+
 def encryptText(key, text):
     hexa = binascii.hexlify(text.encode())
-    return rsa.encrypt(hexa, key["e"], key["n"]).encode()
+    hexa = padText(hexa)
+    result = []
+    for part in hexa:
+        result.append(rsa.encrypt(part, key["e"], key["n"]).encode())
+    return result
 
 def decryptText(key, cypher):
-    hexa = rsa.decrypt(cypher, key["d"], key["n"])
-    return binascii.unhexlify(hexa).decode()
+    result = []
+    for part in cypher:
+        result.append(rsa.decrypt(part, key["d"], key["n"]))
+    return binascii.unhexlify(unpadText(result)).decode()
