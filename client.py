@@ -6,8 +6,8 @@ import backend
 import base64
 
 s = socket.socket()         # Create a socket object
-#host = input("Host: ")
-host = "127.0.0.1"
+host = input("Host: ")
+# host = "127.0.0.1"
 port = 1234                # Reserve a port for your service.
 key = backend.getKey()
 
@@ -26,7 +26,7 @@ while True:
         if(command == "quit"):
             break
         elif(command == "nick"):
-            if(arg == None):
+            if(not arg):
                 print("No nickname provided")
                 text = None
             else:
@@ -45,5 +45,5 @@ while True:
         text = b"m " + backend.encryptText(key, text)
         text += "\n".encode()
         s.send(text)
-#s.sendall("Je suis content")
+
 s.close()                     # Close the socket when done
