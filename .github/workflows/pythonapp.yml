@@ -15,7 +15,7 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        sudo apt install libmpfr-dev
+        sudo apt install libmpfr-dev libmpc-dev
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Lint with flake8
