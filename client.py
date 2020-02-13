@@ -2,16 +2,18 @@
 
 import socket               # Import socket module
 import re
-import backend as rsaBackend
+import backend
+import base64
 
 s = socket.socket()         # Create a socket object
 #host = input("Host: ")
 host = "127.0.0.1"
 port = 1234                # Reserve a port for your service.
-key = rsaBackend.getKey()
+key = backend.getKey()
 
 s.connect((host, port))
 print("Connected to", s.getpeername())
+s.send(b"p " + base64.b64encode(backend.keyToJson(key).encode()) + b"\n")
 
 while True:
     text = input("Votre message: ")
@@ -40,7 +42,7 @@ while True:
             text = None
             print("Unknown Command")
     if(text):
-        text = rsaBackend.encryptText(key, text)
+        text = b"m " + backend.encryptText(key, text)
         text += "\n".encode()
         s.send(text)
 #s.sendall("Je suis content")

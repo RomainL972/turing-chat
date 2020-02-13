@@ -5,6 +5,8 @@ import socket
 import select
 import time
 import miniupnpc
+import re
+import base64
 from threading import Thread
 
 class SocketServer(Thread):
@@ -20,6 +22,7 @@ class SocketServer(Thread):
         if(self.upnp.discover() > 0):
             self.upnp.selectigd()
             self.upnp.addportmapping(port, 'TCP', self.upnp.lanaddr, port, 'Hitler', '')
+            print("You're external IP seems to be " + backend.getPublicIp(), end="")
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -76,7 +79,7 @@ class SocketServerThread(Thread):
         self.client_addr = client_addr
         self.number = number
         self.key = key
-        self.message = b""
+        self.message = ""
 
     def run(self):
         print("[Thr {}] SocketServerThread starting with client {}".format(self.number, self.client_addr))
@@ -99,10 +102,23 @@ class SocketServerThread(Thread):
                         print('[Thr {}] {} closed the socket.'.format(self.number, self.client_addr))
                         self.stop()
                     else:
-                        self.message += read_data
-                        if(self.message.decode()[-1] == "\n"):
-                            print('[Thr {}] Received {}'.format(self.number, backend.decryptText(self.key, self.message).rstrip()))
-                            self.message = b""
+                        self.message += read_data.decode()
+                        if(self.message[-1] == "\n"):
+                            regex = re.search("^([a-z]) ([a-zA-Z0-9+/=]*)\n$", self.message)
+                            if(regex):
+                                command = regex.group(1)
+                                arg = regex.group(2)
+                                if command == "p":
+                                    arg = base64.b64decode(arg.encode()).decode()
+                                    self.key = backend.keyFromJson(arg)
+                                    print("[Thr {}] Received public key".format(self.number))
+                                elif command == "m":
+                                    print("[Thr {}] Received message : {}".format(self.number, backend.decryptText(self.key, arg)))
+                                else:
+                                    raise ValueError("Incorrect command : " + repr(command))
+                                self.message = ""
+                            else:
+                                raise ValueError("Incorrect message : " + self.message)
             else:
                 print("[Thr {}] No client is connected, SocketServer can't receive data".format(self.number))
                 self.stop()
