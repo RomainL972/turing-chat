@@ -4,7 +4,6 @@ import backend
 import socket
 import select
 import miniupnpc
-import re
 
 from threading import Thread
 
@@ -118,28 +117,15 @@ class SocketServerThread(Thread):
                     else:
                         self.message += read_data.decode()
                         if(self.message[-1] == "\n"):
-                            regex = re.search(
-                                "^([a-z]) ([a-zA-Z0-9+/=]*)\n$", self.message)
-                            if(regex):
-                                command = regex.group(1)
-                                arg = regex.group(2)
-                                if command == "p":
-                                    self.key = backend.keyFromBase64(arg)
-                                    print("[Thr {}] Received public key"
-                                          .format(self.number))
-                                elif command == "m":
-                                    print("[Thr {}] Received message : {}"
-                                          .format(
-                                            self.number,
-                                            backend.decryptText(self.key, arg)
-                                            ))
-                                else:
-                                    raise ValueError("Incorrect command : "
-                                                     + repr(command))
-                                self.message = ""
-                            else:
-                                raise ValueError("Incorrect message : "
-                                                 + self.message)
+                            result = backend.parseMessage(
+                                self.message, self.key)
+                            if(result[0] == "pubkey"):
+                                print("[Thr {}] Received public key."
+                                      .format(self.number))
+                            elif(result[0] == "message"):
+                                print("[Thr {}] Received message : {}"
+                                      .format(self.number, result[1]))
+                            self.message = ""
             else:
                 print("[Thr {}] No client is connected, SocketServer can't " +
                       "receive data".format(self.number))

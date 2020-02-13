@@ -6,6 +6,7 @@ import os
 import binascii
 import gmpy2 as gmp
 import urllib.request
+import re
 
 
 def createKey():
@@ -87,3 +88,18 @@ def getPublicIp():
     response = urllib.request.urlopen(req)
     data = response.read()
     return data.decode("utf-8")
+
+
+def parseMessage(message, key):
+    regex = re.search("^([a-z]) ([a-zA-Z0-9+/=]*)\n$", message)
+    if(regex):
+        command = regex.group(1)
+        arg = regex.group(2)
+        if command == "p":
+            return "pubkey", keyFromBase64(arg)
+        elif command == "m":
+            return "message", decryptText(key, arg)
+        else:
+            raise ValueError("Incorrect command : " + command)
+    else:
+        raise ValueError("Incorrect message : " + message)
