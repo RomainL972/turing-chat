@@ -9,13 +9,13 @@ from threading import Thread
 
 
 class SocketServer(Thread):
-    def __init__(self, host='0.0.0.0', port=1234, max_clients=3):
+    def __init__(self, host='0.0.0.0', port=1234, max_clients=1):
         """ Initialize the server with a host and port to listen to.
         Provide a list of functions that will be used when receiving specific
         data """
         Thread.__init__(self)
 
-        self.key = backend.getKey()
+        self.turing = backend.TuringChat()
 
         self.upnp = miniupnpc.UPnP()
         self.upnp.discoverdelay = 10
@@ -26,7 +26,7 @@ class SocketServer(Thread):
                 port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
             )
             print(
-                "You're external IP seems to be " + backend.getPublicIp(),
+                "You're external IP is " + self.turing.getPublicIp(),
                 end=""
             )
 
@@ -72,7 +72,7 @@ class SocketServer(Thread):
 
             if client_sock:
                 client_thr = SocketServerThread(client_sock, client_addr,
-                                                self.counter, self.key)
+                                                self.counter, self.turing)
                 self.counter += 1
                 self.sock_threads.append(client_thr)
                 client_thr.start()
@@ -83,18 +83,19 @@ class SocketServer(Thread):
 
 
 class SocketServerThread(Thread):
-    def __init__(self, client_sock, client_addr, number, key):
+    def __init__(self, client_sock, client_addr, number, turing):
         """ Initialize the Thread with a client socket and address """
         Thread.__init__(self)
         self.client_sock = client_sock
         self.client_addr = client_addr
         self.number = number
-        self.key = key
+        self.turing = turing
         self.message = ""
 
     def run(self):
         print("[Thr {}] SocketServerThread starting with client {}"
               .format(self.number, self.client_addr))
+        self.client_sock.send(b"p " + self.turing.key.toBase64() + b"\n")
         self.__stop = False
         while not self.__stop:
             if self.client_sock:
@@ -118,12 +119,10 @@ class SocketServerThread(Thread):
                     else:
                         self.message += read_data.decode()
                         if(self.message[-1] == "\n"):
-                            result = backend.parseMessage(
-                                self.message, self.key)
-                            if(result[0] == "pubkey"):
+                            result = self.turing.parseMessage(self.message)
+                            if(result == "pubkey"):
                                 print("[Thr {}] Received public key."
                                       .format(self.number))
-                                self.key = result[1]
                             elif(result[0] == "message"):
                                 print("[Thr {}] Received message : {}"
                                       .format(self.number, result[1]))
@@ -149,7 +148,6 @@ def main():
     # Start socket server, stop it after a given duration
     server = SocketServer()
     server.start()
-
 
 if __name__ == "__main__":
     main()

@@ -8,11 +8,18 @@ s = socket.socket()         # Create a socket object
 host = input("Host: ")
 # host = "127.0.0.1"
 port = 1234                # Reserve a port for your service.
-key = backend.getKey()
+turing = backend.TuringChat()
 
 s.connect((host, port))
 print("Connected to", s.getpeername())
-s.send(b"p " + backend.keyToBase64(key) + b"\n")
+message = ""
+while True:
+    data = s.recv(255)
+    message += data.decode()
+    if(message[-1] == "\n"):
+        result = turing.parseMessage(message)
+        if(result == "pubkey"):
+            break
 
 while True:
     text = input("Votre message: ")
@@ -41,7 +48,7 @@ while True:
             text = None
             print("Unknown Command")
     if(text):
-        text = b"m " + backend.encryptText(key, text)
+        text = b"m " + turing.otherKey.encrypt(text)
         text += "\n".encode()
         s.send(text)
 
