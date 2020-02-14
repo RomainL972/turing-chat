@@ -13,7 +13,7 @@ key = backend.getKey()
 
 s.connect((host, port))
 print("Connected to", s.getpeername())
-s.send(b"p " + base64.b64encode(backend.keyToJson(key).encode()) + b"\n")
+s.send(b"p " + backend.keyToBase64(key) + b"\n")
 
 while True:
     text = input("Votre message: ")
