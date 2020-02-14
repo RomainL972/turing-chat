@@ -21,6 +21,7 @@ class SocketServer(Thread):
         self.upnp.discoverdelay = 10
         if(self.upnp.discover() > 0):
             self.upnp.selectigd()
+            self.upnp.deleteportmapping(port, 'TCP')
             self.upnp.addportmapping(
                 port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
             )
@@ -122,6 +123,7 @@ class SocketServerThread(Thread):
                             if(result[0] == "pubkey"):
                                 print("[Thr {}] Received public key."
                                       .format(self.number))
+                                self.key = result[1]
                             elif(result[0] == "message"):
                                 print("[Thr {}] Received message : {}"
                                       .format(self.number, result[1]))
