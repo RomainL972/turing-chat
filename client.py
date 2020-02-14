@@ -3,7 +3,6 @@
 import socket               # Import socket module
 import re
 import backend
-import base64
 
 s = socket.socket()         # Create a socket object
 host = input("Host: ")
