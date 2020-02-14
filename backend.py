@@ -61,6 +61,7 @@ def keyToJson(key):
 def stripPrivateKey(key):
     return dict((k, v) for k, v in key.items() if k != "d")
 
+
 def keyToBase64(key):
     return base64.b64encode(keyToJson(stripPrivateKey(key)).encode())
 
