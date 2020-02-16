@@ -4,18 +4,19 @@ import backend
 import socket
 import select
 import miniupnpc
+import re
 
 from threading import Thread
 
 
 class SocketServer(Thread):
-    def __init__(self, host='0.0.0.0', port=1234, max_clients=1):
+    def __init__(self, turing, host='0.0.0.0', port=1234, max_clients=1):
         """ Initialize the server with a host and port to listen to.
         Provide a list of functions that will be used when receiving specific
         data """
         Thread.__init__(self)
 
-        self.turing = backend.TuringChat()
+        self.turing = turing
 
         self.upnp = miniupnpc.UPnP()
         self.upnp.discoverdelay = 10
@@ -31,7 +32,6 @@ class SocketServer(Thread):
             )
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.host = host
         self.port = port
         self.sock.bind((host, port))
@@ -146,8 +146,39 @@ class SocketServerThread(Thread):
 
 def main():
     # Start socket server, stop it after a given duration
-    server = SocketServer()
+    turing = backend.TuringChat()
+    server = SocketServer(turing)
     server.start()
+    while True:
+        text = input()
+        regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", text)
+
+        if(regex):
+            command = regex.group(1)
+            arg = regex.group(3)
+
+            if(command == "quit"):
+                break
+            elif(command == "nick"):
+                if(not arg):
+                    print("No nickname provided")
+                    text = None
+                else:
+                    text = "/nick " + arg
+                    print("Nickname changed")
+            elif(command == "help"):
+                text = None
+                print("Available Commands:")
+                print("/quit: Quit the app")
+                print("/help: Show this page")
+                print("/nick <nickname>: Change nickname")
+            else:
+                text = None
+                print("Unknown Command")
+        if(text):
+            text = b"m " + turing.otherKey.encrypt(text)
+            text += "\n".encode()
+            server.sock_threads[0].client_sock.send(text)
 
 
 if __name__ == "__main__":

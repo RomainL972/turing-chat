@@ -3,6 +3,7 @@
 import socket               # Import socket module
 import re
 import backend
+import mainserver
 
 s = socket.socket()         # Create a socket object
 host = input("Host: ")
@@ -12,17 +13,22 @@ turing = backend.TuringChat()
 
 s.connect((host, port))
 print("Connected to", s.getpeername())
-message = ""
-while True:
-    data = s.recv(255)
-    message += data.decode()
-    if(message[-1] == "\n"):
-        result = turing.parseMessage(message)
-        if(result == "pubkey"):
-            break
+
+client_thr = mainserver.SocketServerThread(s, s.getpeername(),
+                                0, turing)
+client_thr.start()
+
+# message = ""
+# while True:
+#     data = s.recv(255)
+#     message += data.decode()
+#     if(message[-1] == "\n"):
+#         result = turing.parseMessage(message)
+#         if(result == "pubkey"):
+#             break
 
 while True:
-    text = input("Votre message: ")
+    text = input()
     regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", text)
 
     if(regex):
