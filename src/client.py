@@ -18,9 +18,9 @@ class SocketClient():
         try:
             self.sock.connect((host, port))
         except ConnectionRefusedError:
-            self.rdyRead("The connexion was refused", True, True)
+            self.rdyRead("The connexion was refused", True)
             return
-        print("Connected to", self.sock.getpeername())
+        self.rdyRead("Connected to "+ str(self.sock.getpeername()), True)
 
         client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
                                      self.turing, self.rdyRead, self.rdyWrite)
@@ -30,7 +30,7 @@ class SocketClient():
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        print('Closing client socket')
+        self.rdyRead('Closing client socket', True)
 
         if self.sock_thread:
             self.sock_thread.stop()
