@@ -3,7 +3,7 @@ import socket
 from threading import Thread
 
 class ConnexionThread(Thread):
-    def __init__(self, socket, addr, number, turing):
+    def __init__(self, socket, addr, number, turing, rdyRead, rdyWrite):
         """ Initialize the Thread with a client socket and address """
         Thread.__init__(self)
         self.socket = socket
@@ -11,6 +11,8 @@ class ConnexionThread(Thread):
         self.number = number
         self.turing = turing
         self.message = ""
+        self.rdyReadFunc = rdyRead
+        self.rdyWriteFunc = rdyWrite
 
     def send(self, text):
         if self.socket and not self.__stop:
@@ -49,11 +51,13 @@ class ConnexionThread(Thread):
                         if(self.message[-1] == "\n"):
                             result = self.turing.parseMessage(self.message)
                             if(result == "pubkey"):
-                                print("[Thr {}] Received public key."
-                                      .format(self.number))
+                                Thread(
+                                    target=self.rdyWriteFunc,
+                                    args=[self]).start()
                             elif(result[0] == "message"):
-                                print("[Thr {}] Received message : {}"
-                                      .format(self.number, result[1]))
+                                Thread(
+                                    target=self.rdyReadFunc,
+                                    args=[result[1]]).start()
                             self.message = ""
             else:
                 print("[Thr {}] No client is connected, SocketServer can't " +

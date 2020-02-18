@@ -6,51 +6,32 @@ import backend
 import mainserver
 from connexion import ConnexionThread
 
-s = socket.socket()         # Create a socket object
-host = input("Host: ")
-# host = "127.0.0.1"
-port = 1234                # Reserve a port for your service.
-turing = backend.TuringChat()
+class SocketClient():
+    def __init__(self, turing, rdyRead, rdyWrite):
+        self.turing = turing
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.rdyRead = rdyRead
+        self.rdyWrite = rdyWrite
 
-s.connect((host, port))
-print("Connected to", s.getpeername())
+    def connect(self, host="127.0.0.1", port=1234):
+        self.sock.connect((host, port))
+        print("Connected to", self.sock.getpeername())
 
-client_thr = ConnexionThread(s, s.getpeername(), 0, turing)
-client_thr.start()
+        client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
+                                     0, self.turing, self.rdyRead,
+                                     self.rdyWrite)
+        self.sock_thread = client_thr
+        client_thr.start()
 
-while True:
-    text = input("Message : ")
-    CURSOR_UP_ONE = '\x1b[1A'
-    ERASE_LINE = '\x1b[2K'
-    print(CURSOR_UP_ONE + ERASE_LINE, end="")
-    if text:
-        print("Vous :",text)
-    # regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", text)
-    #
-    # if(regex):
-    #     command = regex.group(1)
-    #     arg = regex.group(3)
-    #
-    #     if(command == "quit"):
-    #         break
-    #     elif(command == "nick"):
-    #         if(not arg):
-    #             print("No nickname provided")
-    #             text = None
-    #         else:
-    #             text = "/nick " + arg
-    #             print("Nickname changed")
-    #     elif(command == "help"):
-    #         text = None
-    #         print("Available Commands:")
-    #         print("/quit: Quit the app")
-    #         print("/help: Show this page")
-    #         print("/nick <nickname>: Change nickname")
-    #     else:
-    #         text = None
-    #         print("Unknown Command")
-    # if(text):
-    text = turing.createMessage("message", text)
-    client_thr.send(text)
+    def close(self):
+        """ Close the client socket threads and server socket
+        if they exists. """
+        print('Closing client socket')
 
-s.close()                     # Close the socket when done
+        if self.sock_thread:
+            self.sock_thread.stop()
+            self.sock_thread.join()
+
+        if self.sock:
+            self.sock.close()
+            self.sock = None
