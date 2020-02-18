@@ -2,9 +2,9 @@
 import backend
 
 import socket
-import select
 import miniupnpc
 import re
+from connexion import ConnexionThread
 
 from threading import Thread
 
@@ -71,7 +71,7 @@ class SocketServer(Thread):
                 client_sock = None
 
             if client_sock:
-                client_thr = SocketServerThread(client_sock, client_addr,
+                client_thr = ConnexionThread(client_sock, client_addr,
                                                 self.counter, self.turing)
                 self.counter += 1
                 self.sock_threads.append(client_thr)
@@ -81,104 +81,45 @@ class SocketServer(Thread):
     def stop(self):
         self.__stop = True
 
-
-class SocketServerThread(Thread):
-    def __init__(self, client_sock, client_addr, number, turing):
-        """ Initialize the Thread with a client socket and address """
-        Thread.__init__(self)
-        self.client_sock = client_sock
-        self.client_addr = client_addr
-        self.number = number
-        self.turing = turing
-        self.message = ""
-
-    def run(self):
-        print("[Thr {}] SocketServerThread starting with client {}"
-              .format(self.number, self.client_addr))
-        self.client_sock.send(b"p " + self.turing.key.toBase64() + b"\n")
-        self.__stop = False
-        while not self.__stop:
-            if self.client_sock:
-                try:
-                    rdy_read, rdy_write, sock_err = select.select(
-                        [self.client_sock, ], [self.client_sock, ], [], 5)
-                except select.error:
-                    print('[Thr {}] Select() failed on socket with {}'
-                          .format(self.number, self.client_addr))
-                    self.stop()
-                    return
-
-                if len(rdy_read) > 0:
-                    read_data = self.client_sock.recv(255)
-
-                    # Check if socket has been closed
-                    if len(read_data) == 0:
-                        print('[Thr {}] {} closed the socket.'
-                              .format(self.number, self.client_addr))
-                        self.stop()
-                    else:
-                        self.message += read_data.decode()
-                        if(self.message[-1] == "\n"):
-                            result = self.turing.parseMessage(self.message)
-                            if(result == "pubkey"):
-                                print("[Thr {}] Received public key."
-                                      .format(self.number))
-                            elif(result[0] == "message"):
-                                print("[Thr {}] Received message : {}"
-                                      .format(self.number, result[1]))
-                            self.message = ""
-            else:
-                print("[Thr {}] No client is connected, SocketServer can't " +
-                      "receive data".format(self.number))
-                self.stop()
-        self.close()
-
-    def stop(self):
-        self.__stop = True
-
-    def close(self):
-        """ Close connection with the client socket. """
-        if self.client_sock:
-            print('[Thr {}] Closing connection with {}'
-                  .format(self.number, self.client_addr))
-            self.client_sock.close()
-
-
 def main():
     # Start socket server, stop it after a given duration
     turing = backend.TuringChat()
     server = SocketServer(turing)
     server.start()
     while True:
-        text = input()
-        regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", text)
-
-        if(regex):
-            command = regex.group(1)
-            arg = regex.group(3)
-
-            if(command == "quit"):
-                break
-            elif(command == "nick"):
-                if(not arg):
-                    print("No nickname provided")
-                    text = None
-                else:
-                    text = "/nick " + arg
-                    print("Nickname changed")
-            elif(command == "help"):
-                text = None
-                print("Available Commands:")
-                print("/quit: Quit the app")
-                print("/help: Show this page")
-                print("/nick <nickname>: Change nickname")
-            else:
-                text = None
-                print("Unknown Command")
-        if(text):
-            text = b"m " + turing.otherKey.encrypt(text)
-            text += "\n".encode()
-            server.sock_threads[0].client_sock.send(text)
+        text = input("Message : ")
+        CURSOR_UP_ONE = '\x1b[1A'
+        ERASE_LINE = '\x1b[2K'
+        print(CURSOR_UP_ONE + ERASE_LINE, end="")
+        if text:
+            print("Vous :",text)
+        # regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", text)
+        #
+        # if(regex):
+        #     command = regex.group(1)
+        #     arg = regex.group(3)
+        #
+        #     if(command == "quit"):
+        #         break
+        #     elif(command == "nick"):
+        #         if(not arg):
+        #             print("No nickname provided")
+        #             text = None
+        #         else:
+        #             text = "/nick " + arg
+        #             print("Nickname changed")
+        #     elif(command == "help"):
+        #         text = None
+        #         print("Available Commands:")
+        #         print("/quit: Quit the app")
+        #         print("/help: Show this page")
+        #         print("/nick <nickname>: Change nickname")
+        #     else:
+        #         text = None
+        #         print("Unknown Command")
+        # if(text):
+        text = turing.createMessage("message", text)
+        server.sock_threads[0].send(text)
 
 
 if __name__ == "__main__":

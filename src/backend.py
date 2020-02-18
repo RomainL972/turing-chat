@@ -108,3 +108,10 @@ class TuringChat():
                 raise ValueError("Incorrect command : " + command)
         else:
             raise ValueError("Incorrect message : " + message)
+
+    def createMessage(self, type, message=None):
+        if type == "pubkey":
+            return b"p " + self.key.toBase64() + b"\n"
+        elif type == "message":
+            if(not message): return b""
+            return b"m " + self.otherKey.encrypt(message) + b"\n"
