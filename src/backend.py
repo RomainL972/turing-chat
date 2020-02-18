@@ -86,14 +86,6 @@ class TuringChat():
         else:
             self.key.generate()
 
-    def getPublicIp(self):
-        url = "https://ifconfig.co"
-        req = urllib.request.Request(url)
-        req.add_header("User-Agent", "curl/1.0")
-        response = urllib.request.urlopen(req)
-        data = response.read()
-        return data.decode("utf-8")
-
     def parseMessage(self, message):
         regex = re.search("^([a-z]) ([a-zA-Z0-9+/=]*)\n$", message)
         if(regex):
