@@ -21,6 +21,7 @@ class SocketServer(Thread):
         self.rdyRead = rdyRead
         self.rdyWrite = rdyWrite
 
+        self.upnpEnabled = False
         self.upnp = miniupnpc.UPnP()
         self.upnp.discoverdelay = 10
         if(self.upnp.discover() > 0):
@@ -30,6 +31,7 @@ class SocketServer(Thread):
             self.upnp.addportmapping(
                 port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
             )
+            self.upnpEnabled = True
             print("You're external IP is " + self.upnp.externalipaddress())
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,13 +40,12 @@ class SocketServer(Thread):
         self.sock.bind((host, port))
         self.sock.listen(max_clients)
         self.sock_threads = []
-        self.counter = 0  # Will be used to give a number to each thread
 
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        print('Closing server socket (host {}, port {})'
-              .format(self.host, self.port))
+        self.rdyRead('Closing server socket (host {}, port {})'
+              .format(self.host, self.port), True)
 
         for thr in self.sock_threads:
             thr.stop()
@@ -54,7 +55,7 @@ class SocketServer(Thread):
             self.sock.close()
             self.sock = None
 
-        if self.upnp:
+        if self.upnpEnabled:
             self.upnp.deleteportmapping(self.port, 'TCP')
 
     def run(self):
@@ -73,9 +74,8 @@ class SocketServer(Thread):
 
             if client_sock:
                 client_thr = ConnexionThread(client_sock, client_addr,
-                                             self.counter, self.turing,
-                                             self.rdyRead, self.rdyWrite)
-                self.counter += 1
+                                             self.turing, self.rdyRead,
+                                             self.rdyWrite)
                 self.sock_threads.append(client_thr)
                 client_thr.start()
         self.close()

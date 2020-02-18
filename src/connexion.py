@@ -3,12 +3,11 @@ import socket
 from threading import Thread
 
 class ConnexionThread(Thread):
-    def __init__(self, socket, addr, number, turing, rdyRead, rdyWrite):
+    def __init__(self, socket, addr, turing, rdyRead, rdyWrite):
         """ Initialize the Thread with a client socket and address """
         Thread.__init__(self)
         self.socket = socket
         self.addr = addr
-        self.number = number
         self.turing = turing
         self.message = ""
         self.rdyReadFunc = rdyRead
@@ -23,8 +22,8 @@ class ConnexionThread(Thread):
                 self.socket.send(text)
 
     def run(self):
-        print("[Thr {}] ConnexionThread starting with client {}"
-              .format(self.number, self.addr))
+        self.rdyReadFunc("ConnexionThread starting with {}"
+              .format(self.addr), True)
         self.socket.send(self.turing.createMessage("pubkey"))
         self.__stop = False
         while not self.__stop:
@@ -33,8 +32,8 @@ class ConnexionThread(Thread):
                     rdy_read, rdy_write, sock_err = select.select(
                         [self.socket], [self.socket], [], 5)
                 except select.error:
-                    print('[Thr {}] Select() failed on socket with {}'
-                          .format(self.number, self.addr))
+                    self.rdyReadFunc('Select() failed on socket with {}'
+                          .format(self.addr), True)
                     self.stop()
                     return
 
@@ -43,25 +42,20 @@ class ConnexionThread(Thread):
 
                     # Check if socket has been closed
                     if len(read_data) == 0:
-                        print('[Thr {}] {} closed the socket.'
-                              .format(self.number, self.addr))
+                        self.rdyReadFunc('Closed the socket {}.'
+                              .format(self.addr), True)
                         self.stop()
                     else:
                         self.message += read_data.decode()
                         if(self.message[-1] == "\n"):
                             result = self.turing.parseMessage(self.message)
                             if(result == "pubkey"):
-                                Thread(
-                                    target=self.rdyWriteFunc,
-                                    args=[self]).start()
+                                self.rdyWriteFunc(self)
                             elif(result[0] == "message"):
-                                Thread(
-                                    target=self.rdyReadFunc,
-                                    args=[result[1]]).start()
+                                self.rdyReadFunc(result[1])
                             self.message = ""
             else:
-                print("[Thr {}] No client is connected, SocketServer can't " +
-                      "receive data".format(self.number))
+                print("No client is connected, SocketServer can't receive data")
                 self.stop()
         self.close()
 
@@ -71,6 +65,6 @@ class ConnexionThread(Thread):
     def close(self):
         """ Close connection with the client socket. """
         if self.socket:
-            print('[Thr {}] Closing connection with {}'
-                  .format(self.number, self.addr))
+            self.rdyReadFunc('Closing connection with {}'
+                  .format(self.addr), True)
             self.socket.close()

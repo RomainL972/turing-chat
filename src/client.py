@@ -12,14 +12,18 @@ class SocketClient():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.rdyRead = rdyRead
         self.rdyWrite = rdyWrite
+        self.sock_thread = None
 
     def connect(self, host="127.0.0.1", port=1234):
-        self.sock.connect((host, port))
+        try:
+            self.sock.connect((host, port))
+        except ConnectionRefusedError:
+            self.rdyRead("The connexion was refused", True, True)
+            return
         print("Connected to", self.sock.getpeername())
 
         client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
-                                     0, self.turing, self.rdyRead,
-                                     self.rdyWrite)
+                                     self.turing, self.rdyRead, self.rdyWrite)
         self.sock_thread = client_thr
         client_thr.start()
 

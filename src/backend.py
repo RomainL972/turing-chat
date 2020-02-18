@@ -85,6 +85,7 @@ class TuringChat():
             self.key.fromFile("privkey.json")
         else:
             self.key.generate()
+            self.key.toFile("privkey.json")
 
     def parseMessage(self, message):
         regex = re.search("^([a-z]) ([a-zA-Z0-9+/=]*)\n$", message)
