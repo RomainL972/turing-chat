@@ -2,7 +2,6 @@
 import backend
 
 import socket
-import miniupnpc
 import re
 from connexion import ConnexionThread
 
@@ -22,17 +21,21 @@ class SocketServer(Thread):
         self.rdyWrite = rdyWrite
 
         self.upnpEnabled = False
-        self.upnp = miniupnpc.UPnP()
-        self.upnp.discoverdelay = 10
-        if(self.upnp.discover() > 0):
-            self.upnp.selectigd()
-            if(self.upnp.getspecificportmapping(port, "TCP")):
-                self.upnp.deleteportmapping(port, 'TCP')
-            self.upnp.addportmapping(
-                port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
-            )
-            self.upnpEnabled = True
-            print("You're external IP is " + self.upnp.externalipaddress())
+        try:
+            import miniupnpc
+            self.upnp = miniupnpc.UPnP()
+            self.upnp.discoverdelay = 10
+            if(self.upnp.discover() > 0):
+                self.upnp.selectigd()
+                if(self.upnp.getspecificportmapping(port, "TCP")):
+                    self.upnp.deleteportmapping(port, 'TCP')
+                self.upnp.addportmapping(
+                    port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
+                )
+                self.upnpEnabled = True
+                print("You're external IP is " + self.upnp.externalipaddress())
+        except ImportError:
+            self.rdyRead("Couldn't load UPnP module", True)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.host = host
