@@ -55,7 +55,7 @@ class ConnexionThread(Thread):
                                 self.rdyReadFunc(result[1])
                             self.message = ""
             else:
-                print("No client is connected, SocketServer can't receive data")
+                self.rdyReadFunc("No client is connected, SocketServer can't receive data", True)
                 self.stop()
         self.close()
 
