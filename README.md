@@ -22,4 +22,4 @@ pip install -r requirements
 
 ## Utilisation
 Le programme n'est pas encore fini! Vous pourriez rencontrer des bugs ou des problèmes. Vous pouvez lancer le fichier
-`mainserver.py` pour lancer le serveur et `client.py` pour le client.
+`cli.py` pour lancer l'interface en ligne de commande.
