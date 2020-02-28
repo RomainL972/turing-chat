@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 
-import socket               # Import socket module
-import re
-import backend
-import mainserver
+import socket
 from connexion import ConnexionThread
+
 
 class SocketClient():
     def __init__(self, turing, rdyRead, rdyWrite):
@@ -20,7 +18,7 @@ class SocketClient():
         except ConnectionRefusedError:
             self.rdyRead("The connexion was refused", True)
             return
-        self.rdyRead("Connected to "+ str(self.sock.getpeername()), True)
+        self.rdyRead("Connected to " + str(self.sock.getpeername()), True)
 
         client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
                                      self.turing, self.rdyRead, self.rdyWrite)

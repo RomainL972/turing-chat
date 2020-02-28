@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-import backend
 
 import socket
-import re
 from connexion import ConnexionThread
 
 from threading import Thread
@@ -51,8 +49,7 @@ class SocketServer(Thread):
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        self.rdyRead('Closing server socket (host {}, port {})'
-              .format(self.host, self.port), True)
+        self.rdyRead('Closing server socket (host {}, port {})'.format(self.host, self.port), True)
 
         for thr in self.sock_threads:
             thr.stop()
@@ -68,8 +65,7 @@ class SocketServer(Thread):
     def run(self):
         """ Accept an incoming connection.
         Start a new SocketServerThread that will handle the communication. """
-        self.rdyRead('Starting socket server (host {}, port {})'
-              .format(self.host, self.port), True)
+        self.rdyRead('Starting socket server (host {}, port {})'.format(self.host, self.port), True)
 
         self.__stop = False
         while not self.__stop:

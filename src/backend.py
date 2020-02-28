@@ -5,7 +5,6 @@ import base64
 import os
 import binascii
 import gmpy2 as gmp
-import urllib.request
 import re
 
 
@@ -106,5 +105,6 @@ class TuringChat():
         if type == "pubkey":
             return b"p " + self.key.getPublicKey().toBase64() + b"\n"
         elif type == "message":
-            if(not message): return b""
+            if(not message):
+                return b""
             return b"m " + self.otherKey.encrypt(message) + b"\n"

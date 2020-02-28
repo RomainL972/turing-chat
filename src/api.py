@@ -1,7 +1,8 @@
 from client import SocketClient
-from mainserver import SocketServer
+from server import SocketServer
 from backend import TuringChat
 import re
+
 
 class Interface():
     def __init__(self, recvMessage):
@@ -37,7 +38,7 @@ class Interface():
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", command)
         if(regex):
             command = regex.group(1)
-            arg = regex.group(3)
+            # arg = regex.group(3)
 
             if(command == "quit"):
                 self.stopClient()
