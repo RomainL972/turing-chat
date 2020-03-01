@@ -63,7 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.10.0] - 2020-02-14
 ### Added
-- README.me and LICENSE (MIT)
+- README.md and LICENSE (MIT)
 
 ### Changed
 - Replace backend functions with RSAKey and TuringChat classes
