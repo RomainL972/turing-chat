@@ -37,7 +37,7 @@ def test_generate():
 
 
 def test_toJson(rsa_key):
-    assert rsa_key.toJson() == '{"n": "d71c66013eaee4852fe7797e4e2aeeed",\
+    assert rsa_key.toJson() == '{"n": "d71c66013eaee4852fe7797e4e2aeeed", \
 "e": "10001", "d": "23caa95c4eaa3a02730f965a8a3903d1"}'
 
 
