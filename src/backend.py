@@ -77,7 +77,7 @@ class RSAKey():
 
 
 class TuringChat():
-    def __init__(self):
+    def __init__(self, getKey=True):
         self.key = RSAKey()
         self.otherKey = RSAKey()
         if os.path.isfile("privkey.json"):

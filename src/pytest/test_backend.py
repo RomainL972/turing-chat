@@ -8,7 +8,7 @@ import backend
 
 @pytest.fixture
 def turing():
-    turing = backend.TuringChat()
+    turing = backend.TuringChat(false)
     turing.key.key = {
         'n': mpz(285931472310203125690528209113268809453),
         'e': mpz(65537),
