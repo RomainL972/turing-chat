@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
 from tkinter import *
 import api
 
 wd = Tk()
 
-def bite():    
+def bite():
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar() #pour le message qui sera envoyé
@@ -12,7 +13,7 @@ def bite():
     label.pack(side=TOP)
     messages_frame = Frame(wd)
     scrollbar = Scrollbar(messages_frame)
-    msg_list = Listbox(messages_frame,bg="#545454", height=30, width=100, yscrollcommand=set)
+    msg_list = Text(messages_frame,bg="#545454", height=30, width=100, yscrollcommand=set)
     scrollbar.pack(side=RIGHT, fill=Y)
     msg_list.pack(side=LEFT, fill=BOTH)
     msg_list.pack()
@@ -21,7 +22,7 @@ def bite():
     chp.pack(side=BOTTOM, pady=10)
 
     def writeMsg(msg, logging = False):
-        msg_list.insert(END, msg)
+        msg_list.insert(END, msg + "\n")
 
     interface = api.Interface(writeMsg)
 

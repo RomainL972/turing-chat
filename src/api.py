@@ -53,6 +53,14 @@ class Interface():
                     self.startClient()
                 else:
                     self.startServer()
+            elif(command == "help"):
+                helpText = "Voici les commandes disponibles :\n\
+- /listen : Démarre le serveur\n\
+- /connect [adresse] : Connecte le client à un serveur\n\
+- /quit : Arrête le programme\n\
+- /help : Affiche ce message\n\
+- message : Envoie un message"
+                self.printMessage(helpText, True)
             else:
                 self.printMessage("Incorrect command", True)
         else:
