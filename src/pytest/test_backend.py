@@ -5,6 +5,7 @@ from gmpy2 import mpz
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import backend
 
+
 @pytest.fixture
 def turing():
     turing = backend.TuringChat()
@@ -15,6 +16,7 @@ def turing():
     }
     return turing
 
+
 def test_parseMessage(turing):
     assert turing.parseMessage('m a340911b28e27faffbb490c0fad27e29\n') == ("message", "salut les amis")
     assert turing.parseMessage("p eyJuIjogImQ3MWM2NjAxM2VhZWU0ODUyZmU3Nzk3ZTRlMmFlZWVkIiwgImUiOiAiMTAwMDEifQ==\n") == "pubkey"
@@ -22,6 +24,7 @@ def test_parseMessage(turing):
         turing.parseMessage("test salut\n")
     with pytest.raises(ValueError):
         turing.parseMessage("m -*/456\n")
+
 
 def test_createMessage(turing):
     turing.otherKey = turing.key
