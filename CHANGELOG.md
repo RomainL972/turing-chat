@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Unit tests for backend.py file
+- Unit tests for backend.py file using pytest
 
 ## [0.13.1] - 2020-03-01
 ### Added
