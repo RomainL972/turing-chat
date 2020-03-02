@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Unit tests for backend.py file using pytest
 - Switch to decide if backend should get private key on init
+- A Graphical User Interface
 
 ### Fixed
 - Delete connexion in API when client or server closed
