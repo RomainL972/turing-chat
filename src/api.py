@@ -24,6 +24,7 @@ class Interface():
             self.server.stop()
             self.server.join()
             self.server = None
+            self.connexion = None
 
     def startClient(self):
         self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
@@ -33,6 +34,7 @@ class Interface():
         if self.client:
             self.client.close()
             self.client = None
+            self.connexion = None
 
     def parseCommand(self, command):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9]*))?$", command)

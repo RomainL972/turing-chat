@@ -19,10 +19,7 @@ while True:
     try:
         text = input("\rCommand : ")
     except KeyboardInterrupt:
-        interface.stopServer()
-        interface.stopClient()
-        print("\r" + ERASE_LINE)
-        exit()
+        text = "/quit"
     print(CURSOR_UP_ONE + ERASE_LINE, end="")
     if text:
         res = interface.parseCommand(text)

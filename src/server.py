@@ -27,10 +27,13 @@ class SocketServer(Thread):
                 self.upnp.selectigd()
                 if(self.upnp.getspecificportmapping(port, "TCP")):
                     self.upnp.deleteportmapping(port, 'TCP')
-                self.upnp.addportmapping(
-                    port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
-                )
-                self.upnpEnabled = True
+                try:
+                    self.upnp.addportmapping(
+                        port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
+                    )
+                    self.upnpEnabled = True
+                except Exception:
+                    self.rdyRead("Couldn't add port mapping", True)
                 self.rdyRead("You're external IP is " + self.upnp.externalipaddress(), True)
         except ImportError:
             self.rdyRead("Couldn't load UPnP module", True)

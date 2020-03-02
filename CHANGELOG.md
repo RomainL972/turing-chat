@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unit tests for backend.py file using pytest
 - Switch to decide if backend should get private key on init
 
+### Fixed
+- Delete connexion in API when client or server closed
+- Handle exception when adding port mapping in upnp
+
 ## [0.13.1] - 2020-03-01
 ### Added
 - example code using the API (sample.py)
