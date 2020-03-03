@@ -35,7 +35,7 @@ class Interface():
             self.client.close()
 
     def parseCommand(self, command):
-        regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\.]*))?$", command)
+        regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
         if(regex):
             command = regex.group(1)
             arg = regex.group(3)

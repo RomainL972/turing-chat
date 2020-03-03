@@ -34,10 +34,10 @@ class SocketServer(Thread):
             if(self.upnp.discover() > 0):
                 self.upnp.selectigd()
                 try:
-                    if(self.upnp.getspecificportmapping(port, "TCP")):
-                        self.upnp.deleteportmapping(port, 'TCP')
+                    if(self.upnp.getspecificportmapping(self.port, "TCP")):
+                        self.upnp.deleteportmapping(self.port, 'TCP')
                     self.upnp.addportmapping(
-                        port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
+                        self.port, 'TCP', self.upnp.lanaddr, self.port, 'TuringChat', ''
                     )
                     self.rdyRead("You're external IP is " + self.upnp.externalipaddress(), True)
                     self.upnpEnabled = True
