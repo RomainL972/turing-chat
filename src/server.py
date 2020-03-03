@@ -7,8 +7,7 @@ from threading import Thread
 
 
 class SocketServer(Thread):
-    def __init__(self, turing, rdyRead, rdyWrite, host='0.0.0.0', port=1234,
-                 max_clients=1):
+    def __init__(self, turing, rdyRead, rdyWrite, host='0.0.0.0', port=1234):
         """ Initialize the server with a host and port to listen to.
         Provide a list of functions that will be used when receiving specific
         data """
@@ -17,17 +16,26 @@ class SocketServer(Thread):
         self.turing = turing
         self.rdyRead = rdyRead
         self.rdyWrite = rdyWrite
-
         self.upnpEnabled = False
+        self.upnpAvailable = False
+        self.host = host
+        self.port = port
+        self.sock_threads = []
+        self.sock = None
+
+    def listening(self):
+        return not not self.sock
+
+    def listen(self):
         try:
             import miniupnpc
             self.upnp = miniupnpc.UPnP()
             self.upnp.discoverdelay = 10
             if(self.upnp.discover() > 0):
                 self.upnp.selectigd()
-                if(self.upnp.getspecificportmapping(port, "TCP")):
-                    self.upnp.deleteportmapping(port, 'TCP')
                 try:
+                    if(self.upnp.getspecificportmapping(port, "TCP")):
+                        self.upnp.deleteportmapping(port, 'TCP')
                     self.upnp.addportmapping(
                         port, 'TCP', self.upnp.lanaddr, port, 'TuringChat', ''
                     )
@@ -39,12 +47,9 @@ class SocketServer(Thread):
             self.rdyRead("Couldn't load UPnP module", True)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.host = host
-        self.port = port
-        self.sock_threads = []
         try:
-            self.sock.bind((host, port))
-            self.sock.listen(max_clients)
+            self.sock.bind((self.host, self.port))
+            self.sock.listen(1)
         except OSError:
             self.rdyRead("Couldn't start listening", True)
             self.stop()
@@ -57,6 +62,7 @@ class SocketServer(Thread):
         for thr in self.sock_threads:
             thr.stop()
             thr.join()
+        self.sock_threads = []
 
         if self.sock:
             self.sock.close()
@@ -72,6 +78,8 @@ class SocketServer(Thread):
 
         self.__stop = False
         while not self.__stop:
+            if not self.sock:
+                continue
             self.sock.settimeout(1)
             try:
                 client_sock, client_addr = self.sock.accept()

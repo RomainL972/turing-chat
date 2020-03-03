@@ -11,30 +11,28 @@ class Interface():
         self.server = None
         self.printMessage = recvMessage
         self.connexion = None
+        self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
+        self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
 
     def writeMessages(self, connexion):
         self.connexion = connexion
 
     def startServer(self):
-        self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
+        self.server.listen()
         self.server.start()
 
     def stopServer(self):
-        if self.server:
+        if self.server.listening():
             self.server.stop()
             self.server.join()
-            self.server = None
-            self.connexion = None
+            self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
 
     def startClient(self, addr="127.0.0.1"):
-        self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
         self.client.connect(addr)
 
     def stopClient(self):
-        if self.client:
+        if self.client.connected():
             self.client.close()
-            self.client = None
-            self.connexion = None
 
     def parseCommand(self, command):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\.]*))?$", command)

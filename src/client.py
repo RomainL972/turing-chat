@@ -7,12 +7,16 @@ from connexion import ConnexionThread
 class SocketClient():
     def __init__(self, turing, rdyRead, rdyWrite):
         self.turing = turing
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock = None
         self.rdyRead = rdyRead
         self.rdyWrite = rdyWrite
         self.sock_thread = None
 
+    def connected(self):
+        return not not self.sock
+
     def connect(self, host="127.0.0.1", port=1234):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.sock.connect((host, port))
         except ConnectionRefusedError:
