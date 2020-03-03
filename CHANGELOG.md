@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2020-03-03
+### Added
+- Argument for /connect in the API
+- First Release Version
+
 ## [0.14.0] - 2020-03-02
 ### Added
 - Unit tests for backend.py file using pytest
@@ -178,6 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic server and client
 - Use regex to parse commands
 
+[1.0.0]: https://github.com/RomainL972/isn/compare/v0.14.0...v1.0.0
 [0.14.0]: https://github.com/RomainL972/isn/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/RomainL972/isn/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/RomainL972/isn/compare/v0.12.0...v0.13.0
