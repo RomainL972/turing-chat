@@ -22,4 +22,4 @@ pip install -r requirements
 
 ## Utilisation
 Le programme n'est pas encore fini! Vous pourriez rencontrer des bugs ou des problèmes. Vous pouvez lancer le fichier
-`cli.py` pour lancer l'interface en ligne de commande.
+`cli.py` pour lancer l'interface en ligne de commande. Le fichier `gui.py` lancera l'interface graphique.
