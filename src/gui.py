@@ -24,6 +24,8 @@ def bite():
     chp.pack(side=BOTTOM, pady=10)
 
     def writeMsg(msg, logging=False):
+        if logging == False:
+            msg_list.insert(END, "L'autre : ")
         msg_list.insert(END, msg + "\n")
 
     interface = api.Interface(writeMsg)
