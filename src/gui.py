@@ -13,7 +13,7 @@ def bite():
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
-    msg.set("Type your messages here.")
+    msg.set()
     label = Label(wd, text="vous etes connecté", font=("courrier", 22), bg="#56646A", fg="white")
     label.pack(side=TOP)
     messages_frame = Frame(wd)
