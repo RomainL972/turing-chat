@@ -31,7 +31,8 @@ def bite():
     interface = api.Interface(writeMsg)
 
     def send(e):
-        interface.parseCommand(msg.get())
+        if interface.parseCommand(msg.get()) == "quit":
+            wd.quit()
         msg.set("")
 
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
@@ -40,8 +41,8 @@ def bite():
 # creer une fenetre
 wd.title("TuringChat")
 
-wd.geometry("1080x720")
-wd.minsize(360, 270)
+wd.geometry("1180x720")
+wd.minsize(1000, 270)
 wd.maxsize(1920, 1080)
 wd.config(bg="#56646A")
 
