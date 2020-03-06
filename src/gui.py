@@ -5,8 +5,11 @@ import api
 
 wd = Tk()
 
+interface = None
+stop = False
 
 def bite():
+    global interface
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
@@ -24,6 +27,9 @@ def bite():
     chp.pack(side=BOTTOM, pady=10)
 
     def writeMsg(msg, logging=False):
+        global stop
+        if stop:
+            return
         if logging == False:
             msg_list.insert(END, "L'autre : ")
         msg_list.insert(END, msg + "\n")
@@ -31,7 +37,9 @@ def bite():
     interface = api.Interface(writeMsg)
 
     def send(e):
+        global stop
         if interface.parseCommand(msg.get()) == "quit":
+            stop = True
             wd.quit()
         msg.set("")
 
@@ -63,3 +71,9 @@ btn.pack(fill=X)
 frame.pack(expand=YES)
 
 wd.mainloop()
+if stop:
+    exit()
+stop = True
+if interface:
+    interface.stopClient()
+    interface.stopServer()

@@ -17,6 +17,7 @@ class SocketClient():
 
     def connect(self, host="127.0.0.1", port=1234):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.settimeout(5)
         try:
             self.sock.connect((host, port))
         except ConnectionRefusedError:
