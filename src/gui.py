@@ -38,7 +38,7 @@ def bite():
 
 
 # creer une fenetre
-wd.title("Turinchat")
+wd.title("TuringChat")
 
 wd.geometry("1080x720")
 wd.minsize(360, 270)
@@ -48,7 +48,7 @@ wd.config(bg="#56646A")
 # creer frame
 frame = Frame(wd, bg="#56646A")
 # creer Titre
-label_title = Label(frame, text="bienvenue sur Turinchat", font=("Courrier", 45), bg="#56646A", fg="white")
+label_title = Label(frame, text="bienvenue sur TuringChat", font=("Courrier", 45), bg="#56646A", fg="white")
 label_title.pack()
 
 # creer sous titre
