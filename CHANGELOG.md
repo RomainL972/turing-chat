@@ -12,11 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API now always has a client and a server, now always connected, no change in functions
 - Client can be restarted
 - Server doesn't automatically listen for connections
+- Change minimum resolution in GUI
 
 ### Fixed
 - Connexion makes itself inaccessible in API before closing
 - Better formatting in gui.py
 - Replace Turinchat by TuringChat
+- Fixed test.decrypt in test_rsa
 
 ## [1.0.0] - 2020-03-03
 ### Added

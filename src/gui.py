@@ -13,7 +13,6 @@ def bite():
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
-    msg.set()
     label = Label(wd, text="vous etes connecté", font=("courrier", 22), bg="#56646A", fg="white")
     label.pack(side=TOP)
     messages_frame = Frame(wd)
@@ -50,7 +49,7 @@ def bite():
 wd.title("TuringChat")
 
 wd.geometry("1180x720")
-wd.minsize(1000, 270)
+wd.minsize(700, 600)
 wd.maxsize(1920, 1080)
 wd.config(bg="#56646A")
 
