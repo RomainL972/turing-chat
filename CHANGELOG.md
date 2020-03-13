@@ -4,12 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - 2020-03-12
 ### Added
 - Indication when message comes from other person in the GUI
 
 ### Changed
-- API now always has a client and a server, now always connected, no change in functions
+- API now always has a client and a server, not always connected, no change in functions
 - Client can be restarted
 - Server doesn't automatically listen for connections
 - Change minimum resolution in GUI
@@ -199,6 +199,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic server and client
 - Use regex to parse commands
 
+[1.1.0]: https://github.com/RomainL972/isn/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/RomainL972/isn/compare/v0.14.0...v1.0.0
 [0.14.0]: https://github.com/RomainL972/isn/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/RomainL972/isn/compare/v0.13.0...v0.13.1
