@@ -2,11 +2,16 @@
 from tkinter import Tk, Label, Frame, Text, Scrollbar, StringVar, Entry, Button
 from tkinter import TOP, RIGHT, LEFT, Y, BOTH, SUNKEN, BOTTOM, END, X, YES
 import api
+from threading import Thread
 
 wd = Tk()
 
 interface = None
 stop = False
+
+def quit():
+    wd.quit()
+    exit()
 
 def bite():
     global interface
@@ -33,13 +38,11 @@ def bite():
             msg_list.insert(END, "L'autre : ")
         msg_list.insert(END, msg + "\n")
 
-    interface = api.Interface(writeMsg)
+    interface = api.Interface(writeMsg, quit)
 
     def send(e):
         global stop
-        if interface.parseCommand(msg.get()) == "quit":
-            stop = True
-            wd.quit()
+        Thread(target=interface.parseCommand, args=[msg.get()]).start()
         msg.set("")
 
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
