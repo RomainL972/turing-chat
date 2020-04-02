@@ -114,3 +114,5 @@ class TuringChat():
             if (not message):
                 return b""
             return b"u " + message.encode() + b"\n"
+        else:
+            return b""

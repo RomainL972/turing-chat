@@ -19,7 +19,7 @@ class Interface():
 
     def writeMessages(self, connexion):
         self.connexion = connexion
-        if self.username:
+        if self.username and self.connexion:
             self.connexion.send(self.turing.createMessage("username", self.username))
 
     def startServer(self):

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - INstead of importing everything, go back to from tkinter import *
+- The callback to print messages is now by default in logging mode
 
 ### Fixed
 - Make msg_list readonly in gui
