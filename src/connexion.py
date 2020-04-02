@@ -50,6 +50,8 @@ class ConnexionThread(Thread):
                                 self.rdyWriteFunc(self)
                             elif(result[0] == "message"):
                                 self.rdyReadFunc(result[1])
+                            elif(result[0] == "username"):
+                                self.rdyReadFunc("", False, result[1])
                             self.message = ""
             else:
                 self.rdyReadFunc("No connection, ConnexionThread can't receive data", True)

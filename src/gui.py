@@ -30,12 +30,18 @@ def disc():
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chp.pack(side=BOTTOM, pady=10)
 
-    def writeMsg(msg, logging=False):
+    def writeMsg(msg, logging=False, username=None):
+        if username:
+            interface.otherUsername = username
+            return
         global stop
         if stop:
             return
         if logging == False:
-            msg_list.insert(END, "L'autre : ")
+            username = interface.otherUsername
+            if(not username):
+                username = "L'autre"
+            msg_list.insert(END, username + " : ")
         msg_list.insert(END, msg + "\n")
 
     interface = api.Interface(writeMsg, quit)

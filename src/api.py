@@ -14,9 +14,13 @@ class Interface():
         self.connexion = None
         self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
         self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
+        self.username = None
+        self.otherUsername = None
 
     def writeMessages(self, connexion):
         self.connexion = connexion
+        if self.username:
+            self.connexion.send(self.turing.createMessage("username", username))
 
     def startServer(self):
         self.server.listen()
@@ -34,6 +38,11 @@ class Interface():
     def stopClient(self):
         if self.client.connected():
             self.client.close()
+
+    def setUsername(self, username):
+        self.username = username
+        if self.connexion:
+            self.connexion.send(self.turing.createMessage("username", username))
 
     def parseCommand(self, command):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
@@ -56,12 +65,15 @@ class Interface():
                     self.startClient(arg)
                 else:
                     self.startServer()
+            elif(command == "nick" and arg):
+                self.setUsername(arg)
             elif(command == "help"):
                 helpText = "Voici les commandes disponibles :\n\
 - /listen : Démarre le serveur\n\
 - /connect [adresse] : Connecte le client à un serveur\n\
 - /quit : Arrête le programme\n\
 - /help : Affiche ce message\n\
+- /nick <username>: Change username\n\
 - message : Envoie un message"
                 self.printMessage(helpText, True)
             else:

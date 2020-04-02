@@ -96,6 +96,8 @@ class TuringChat():
                 return "pubkey"
             elif command == "m":
                 return "message", self.key.decrypt(arg)
+            elif command == "u":
+                return "username", arg
             else:
                 raise ValueError("Incorrect command : " + command)
         else:
@@ -108,3 +110,7 @@ class TuringChat():
             if(not message):
                 return b""
             return b"m " + self.otherKey.encrypt(message) + b"\n"
+        elif type == "username":
+            if (not message):
+                return b""
+            return b"u " + message.encode() + b"\n"
