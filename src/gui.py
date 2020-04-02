@@ -8,7 +8,7 @@ wd = Tk()
 interface = None
 stop = False
 
-def bite():
+def disc():
     global interface
     for c in wd.winfo_children():
         c.destroy()
@@ -66,7 +66,7 @@ meme la NSA nous utilise, PS : laissez nous rever", font=("courrier", 25), bg="#
 label_subtitle.pack()
 
 # bouton connection
-btn = Button(frame, text="connexion", font=("courrier", 22), bg="white", fg="#56646A", command=bite)
+btn = Button(frame, text="connexion", font=("courrier", 22), bg="white", fg="#56646A", command=disc)
 btn.pack(fill=X)
 frame.pack(expand=YES)
 
