@@ -43,7 +43,7 @@ class Interface():
         self.username = username
         if self.connexion:
             self.connexion.send(self.turing.createMessage("username", username))
-        self.printMessage("Username changed to " + username, True)
+        self.printMessage("Username changed to " + username)
 
     def parseCommand(self, command):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
@@ -76,12 +76,12 @@ class Interface():
 - /help : Affiche ce message\n\
 - /nick <username>: Change username\n\
 - message : Envoie un message"
-                self.printMessage(helpText, True)
+                self.printMessage(helpText)
             else:
-                self.printMessage("Incorrect command", True)
+                self.printMessage("Incorrect command")
         else:
             if not self.connexion:
-                self.printMessage("Not connected", True)
+                self.printMessage("Not connected")
                 return
-            self.printMessage("Vous : "+command, True)
+            self.printMessage("Vous : "+command)
             self.connexion.send(self.turing.createMessage("message", command))

@@ -22,7 +22,7 @@ class ConnexionThread(Thread):
                 self.socket.send(text)
 
     def run(self):
-        self.rdyReadFunc("ConnexionThread starting with {}".format(self.addr), True)
+        self.rdyReadFunc("ConnexionThread starting with {}".format(self.addr))
         self.socket.send(self.turing.createMessage("pubkey"))
         self.__stop = False
         while not self.__stop:
@@ -31,7 +31,7 @@ class ConnexionThread(Thread):
                     rdy_read, rdy_write, sock_err = select.select(
                         [self.socket], [self.socket], [], 5)
                 except select.error:
-                    self.rdyReadFunc('Select() failed on socket with {}'.format(self.addr), True)
+                    self.rdyReadFunc('Select() failed on socket with {}'.format(self.addr))
                     self.stop()
                     return
 
@@ -40,7 +40,7 @@ class ConnexionThread(Thread):
 
                     # Check if socket has been closed
                     if len(read_data) == 0:
-                        self.rdyReadFunc('Closed the socket {}.'.format(self.addr), True)
+                        self.rdyReadFunc('Closed the socket {}.'.format(self.addr))
                         self.stop()
                     else:
                         self.message += read_data.decode()
@@ -49,12 +49,12 @@ class ConnexionThread(Thread):
                             if(result == "pubkey"):
                                 self.rdyWriteFunc(self)
                             elif(result[0] == "message"):
-                                self.rdyReadFunc(result[1])
+                                self.rdyReadFunc(result[1], True)
                             elif(result[0] == "username"):
-                                self.rdyReadFunc("", False, result[1])
+                                self.rdyReadFunc("", username=result[1])
                             self.message = ""
             else:
-                self.rdyReadFunc("No connection, ConnexionThread can't receive data", True)
+                self.rdyReadFunc("No connection, ConnexionThread can't receive data")
                 self.stop()
         self.close()
 
@@ -65,5 +65,5 @@ class ConnexionThread(Thread):
     def close(self):
         """ Close connection with the client socket. """
         if self.socket:
-            self.rdyReadFunc('Closing connection with {}'.format(self.addr), True)
+            self.rdyReadFunc('Closing connection with {}'.format(self.addr))
             self.socket.close()

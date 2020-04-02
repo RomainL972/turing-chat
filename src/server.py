@@ -39,25 +39,25 @@ class SocketServer(Thread):
                     self.upnp.addportmapping(
                         self.port, 'TCP', self.upnp.lanaddr, self.port, 'TuringChat', ''
                     )
-                    self.rdyRead("You're external IP is " + self.upnp.externalipaddress(), True)
+                    self.rdyRead("You're external IP is " + self.upnp.externalipaddress())
                     self.upnpEnabled = True
                 except Exception:
-                    self.rdyRead("Couldn't add port mapping", True)
+                    self.rdyRead("Couldn't add port mapping")
         except ImportError:
-            self.rdyRead("Couldn't load UPnP module", True)
+            self.rdyRead("Couldn't load UPnP module")
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.sock.bind((self.host, self.port))
             self.sock.listen(1)
         except OSError:
-            self.rdyRead("Couldn't start listening", True)
+            self.rdyRead("Couldn't start listening")
             self.stop()
 
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        self.rdyRead('Closing server socket (host {}, port {})'.format(self.host, self.port), True)
+        self.rdyRead('Closing server socket (host {}, port {})'.format(self.host, self.port))
 
         for thr in self.sock_threads:
             thr.stop()
@@ -74,7 +74,7 @@ class SocketServer(Thread):
     def run(self):
         """ Accept an incoming connection.
         Start a new SocketServerThread that will handle the communication. """
-        self.rdyRead('Starting socket server (host {}, port {})'.format(self.host, self.port), True)
+        self.rdyRead('Starting socket server (host {}, port {})'.format(self.host, self.port))
 
         self.__stop = False
         while not self.__stop:

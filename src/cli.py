@@ -7,13 +7,13 @@ ERASE_LINE = '\x1b[2K'
 
 interface = None
 
-def printMessage(message, logging=False, username=None):
+def printMessage(message, message=False, username=None):
     global interface
     if username:
         interface.otherUsername = username
         print("\r" + ERASE_LINE + "Correspondant username changed to " + username)
         return
-    if not logging:
+    if message:
         username = interface.otherUsername
         if(not username):
             username = "L'autre"

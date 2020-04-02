@@ -29,7 +29,7 @@ def disc():
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chp.pack(side=BOTTOM, pady=10)
 
-    def writeMsg(msg, logging=False, username=None):
+    def writeMsg(msg, message=False, username=None):
         if username:
             msg_list.config(state=NORMAL)
             interface.otherUsername = username
@@ -40,7 +40,7 @@ def disc():
         if stop:
             return
         msg_list.config(state=NORMAL)
-        if logging == False:
+        if message:
             username = interface.otherUsername
             if(not username):
                 username = "L'autre"
