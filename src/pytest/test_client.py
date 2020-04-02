@@ -13,6 +13,22 @@ def empty_func(arg):
     pass
 
 i=0
+
+def test_connectWithoutServer():
+    global i
+    i = 0
+
+    # This function will test if client output is what it should be
+    def test_output(msg, logging=False):
+        global i
+        if i == 0:
+            assert msg == "The connexion was refused"
+        i += 1
+    c = client.SocketClient(backend.TuringChat(False), test_output, empty_func)
+    c.connect("127.0.0.1", 1234)
+    assert i == 1
+    c.close()
+
 def test_connect():
     global i
     i = 0
@@ -35,24 +51,9 @@ def test_connect():
     t.start()
 
     c.connect("127.0.0.1", 1234)
-    assert i == 2  # There should have been 2 messages
+    assert i >= 2  # There should have been 2 messages
 
     # We close everything
-    server.close()
-    c.close()
     t.join()
-
-def test_connectWithoutServer():
-    global i
-    i = 0
-
-    # This function will test if client output is what it should be
-    def test_output(msg, logging=False):
-        global i
-        if i == 0:
-            assert msg == "The connexion was refused"
-        i += 1
-    c = client.SocketClient(backend.TuringChat(False), test_output, empty_func)
-    c.connect("127.0.0.1", 1234)
-    assert i == 1
+    server.close()
     c.close()
