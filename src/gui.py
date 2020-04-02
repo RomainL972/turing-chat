@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-from tkinter import Tk, Label, Frame, Text, Scrollbar, StringVar, Entry, Button
-from tkinter import TOP, RIGHT, LEFT, Y, BOTH, SUNKEN, BOTTOM, END, X, YES
+from tkinter import *
 import api
 from threading import Thread
 
@@ -22,7 +21,7 @@ def disc():
     label.pack(side=TOP)
     messages_frame = Frame(wd)
     scrollbar = Scrollbar(messages_frame)
-    msg_list = Text(messages_frame, bg="#545454", height=30, width=100, yscrollcommand=set)
+    msg_list = Text(messages_frame, bg="#545454", height=30, width=100, yscrollcommand=set, state=DISABLED)
     scrollbar.pack(side=RIGHT, fill=Y)
     msg_list.pack(side=LEFT, fill=BOTH)
     msg_list.pack()
@@ -32,23 +31,26 @@ def disc():
 
     def writeMsg(msg, logging=False, username=None):
         if username:
+            msg_list.config(state=NORMAL)
             interface.otherUsername = username
             msg_list.insert(END, "Correspondant username changed to " + username)
+            msg_list.config(state=DISABLED)
             return
         global stop
         if stop:
             return
+        msg_list.config(state=NORMAL)
         if logging == False:
             username = interface.otherUsername
             if(not username):
                 username = "L'autre"
             msg_list.insert(END, username + " : ")
         msg_list.insert(END, msg + "\n")
+        msg_list.config(state=DISABLED)
 
     interface = api.Interface(writeMsg, quit)
 
     def send(e):
-        global stop
         Thread(target=interface.parseCommand, args=[msg.get()]).start()
         msg.set("")
 

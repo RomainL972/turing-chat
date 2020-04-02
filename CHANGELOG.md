@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Username functionnality
 
+### Changed
+- INstead of importing everything, go back to from tkinter import *
+
+### Fixed
+- Make msg_list readonly in gui
+
 ## [1.1.1] - 2020-04-02
 ### Added
 - sendQuit callback in API, called when "/quit" entered
