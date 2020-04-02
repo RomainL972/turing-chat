@@ -7,7 +7,7 @@ ERASE_LINE = '\x1b[2K'
 
 interface = None
 
-def printMessage(message, message=False, username=None):
+def printMessage(text, message=False, username=None):
     global interface
     if username:
         interface.otherUsername = username
@@ -17,9 +17,9 @@ def printMessage(message, message=False, username=None):
         username = interface.otherUsername
         if(not username):
             username = "L'autre"
-        print("\r" + ERASE_LINE + username + " : " + message + "\nCommand : ", end="")
+        print("\r" + ERASE_LINE + username + " : " + text + "\nCommand : ", end="")
     else:
-        print("\r" + ERASE_LINE + message + "\nCommand : ", end="")
+        print("\r" + ERASE_LINE + text + "\nCommand : ", end="")
 
 
 interface = Interface(printMessage)
