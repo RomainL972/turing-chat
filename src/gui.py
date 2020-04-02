@@ -33,6 +33,7 @@ def disc():
     def writeMsg(msg, logging=False, username=None):
         if username:
             interface.otherUsername = username
+            msg_list.insert(END, "Correspondant username changed to " + username)
             return
         global stop
         if stop:

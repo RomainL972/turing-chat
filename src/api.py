@@ -20,7 +20,7 @@ class Interface():
     def writeMessages(self, connexion):
         self.connexion = connexion
         if self.username:
-            self.connexion.send(self.turing.createMessage("username", username))
+            self.connexion.send(self.turing.createMessage("username", self.username))
 
     def startServer(self):
         self.server.listen()
@@ -43,6 +43,7 @@ class Interface():
         self.username = username
         if self.connexion:
             self.connexion.send(self.turing.createMessage("username", username))
+        self.printMessage("Username changed to " + username)
 
     def parseCommand(self, command):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
