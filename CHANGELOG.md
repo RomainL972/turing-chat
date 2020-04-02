@@ -6,17 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- sendQuit callback in API, called when "/quit" entered
+
+### Fixed
+- add threading in GUI so it doesn't hang and prints messages
+
+## [1.1.0] - 2020-03-12
+### Added
 - Indication when message comes from other person in the GUI
 
 ### Changed
-- API now always has a client and a server, now always connected, no change in functions
+- API now always has a client and a server, not always connected, no change in functions
 - Client can be restarted
 - Server doesn't automatically listen for connections
+- Change minimum resolution in GUI
 
 ### Fixed
 - Connexion makes itself inaccessible in API before closing
 - Better formatting in gui.py
 - Replace Turinchat by TuringChat
+- Fixed test.decrypt in test_rsa
 
 ## [1.0.0] - 2020-03-03
 ### Added
@@ -197,6 +206,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic server and client
 - Use regex to parse commands
 
+[Unreleased]: https://github.com/RomainL972/isn/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/RomainL972/isn/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/RomainL972/isn/compare/v0.14.0...v1.0.0
 [0.14.0]: https://github.com/RomainL972/isn/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/RomainL972/isn/compare/v0.13.0...v0.13.1

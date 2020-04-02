@@ -2,18 +2,22 @@
 from tkinter import Tk, Label, Frame, Text, Scrollbar, StringVar, Entry, Button
 from tkinter import TOP, RIGHT, LEFT, Y, BOTH, SUNKEN, BOTTOM, END, X, YES
 import api
+from threading import Thread
 
 wd = Tk()
 
 interface = None
 stop = False
 
+def quit():
+    wd.quit()
+    exit()
+
 def disc():
     global interface
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
-    msg.set()
     label = Label(wd, text="vous etes connecté", font=("courrier", 22), bg="#56646A", fg="white")
     label.pack(side=TOP)
     messages_frame = Frame(wd)
@@ -34,13 +38,11 @@ def disc():
             msg_list.insert(END, "L'autre : ")
         msg_list.insert(END, msg + "\n")
 
-    interface = api.Interface(writeMsg)
+    interface = api.Interface(writeMsg, quit)
 
     def send(e):
         global stop
-        if interface.parseCommand(msg.get()) == "quit":
-            stop = True
-            wd.quit()
+        Thread(target=interface.parseCommand, args=[msg.get()]).start()
         msg.set("")
 
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
@@ -50,7 +52,7 @@ def disc():
 wd.title("TuringChat")
 
 wd.geometry("1180x720")
-wd.minsize(1000, 270)
+wd.minsize(700, 600)
 wd.maxsize(1920, 1080)
 wd.config(bg="#56646A")
 

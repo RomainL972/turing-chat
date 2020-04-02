@@ -5,11 +5,12 @@ import re
 
 
 class Interface():
-    def __init__(self, recvMessage):
+    def __init__(self, recvMessage, sendQuit=None):
         self.turing = TuringChat()
         self.client = None
         self.server = None
         self.printMessage = recvMessage
+        self.sendQuit = sendQuit
         self.connexion = None
         self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
         self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
@@ -43,6 +44,8 @@ class Interface():
             if(command == "quit"):
                 self.stopClient()
                 self.stopServer()
+                if self.sendQuit:
+                    self.sendQuit()
                 return "quit"
             elif(command == "connect" or command == "listen"):
                 self.stopClient()
