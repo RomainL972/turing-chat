@@ -11,8 +11,7 @@ def printMessage(text, message=False, username=None):
     global interface
     if username:
         interface.otherUsername = username
-        print("\r" + ERASE_LINE + "Correspondant username changed to " + username)
-        return
+        return printMessage("Correspondant username changed to " + username)
     if message:
         username = interface.otherUsername
         if(not username):
