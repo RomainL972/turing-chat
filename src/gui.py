@@ -33,7 +33,7 @@ def disc():
         if username:
             msg_list.config(state=NORMAL)
             interface.otherUsername = username
-            msg_list.insert(END, "Correspondant username changed to " + username)
+            msg_list.insert(END, "Correspondant username changed to " + username + "\n")
             msg_list.config(state=DISABLED)
             return
         global stop

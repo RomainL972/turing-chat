@@ -5,10 +5,19 @@ from api import Interface
 CURSOR_UP_ONE = '\x1b[1A'
 ERASE_LINE = '\x1b[2K'
 
+interface = None
 
-def printMessage(message, logging=False):
+def printMessage(message, logging=False, username=None):
+    global interface
+    if username:
+        interface.otherUsername = username
+        print("\r" + ERASE_LINE + "Correspondant username changed to " + username)
+        return
     if not logging:
-        print("\r" + ERASE_LINE + "L'autre : " + message + "\nCommand : ", end="")
+        username = interface.otherUsername
+        if(not username):
+            username = "L'autre"
+        print("\r" + ERASE_LINE + username + " : " + message + "\nCommand : ", end="")
     else:
         print("\r" + ERASE_LINE + message + "\nCommand : ", end="")
 
