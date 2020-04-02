@@ -45,13 +45,16 @@ class ConnexionThread(Thread):
                     else:
                         self.message += read_data.decode()
                         if(self.message[-1] == "\n"):
-                            result = self.turing.parseMessage(self.message)
-                            if(result == "pubkey"):
-                                self.rdyWriteFunc(self)
-                            elif(result[0] == "message"):
-                                self.rdyReadFunc(result[1], True)
-                            elif(result[0] == "username"):
-                                self.rdyReadFunc("", username=result[1])
+                            try:
+                                result = self.turing.parseMessage(self.message)
+                                if(result == "pubkey"):
+                                    self.rdyWriteFunc(self)
+                                elif(result[0] == "message"):
+                                    self.rdyReadFunc(result[1], True)
+                                elif(result[0] == "username"):
+                                    self.rdyReadFunc("", username=result[1])
+                            except ValueError:
+                                self.rdyReadFunc("Unknown message type received")
                             self.message = ""
             else:
                 self.rdyReadFunc("No connection, ConnexionThread can't receive data")

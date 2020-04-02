@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Make msg_list readonly in gui
+- The program won't crash when an unknown message is received anymore
 
 ## [1.1.1] - 2020-04-02
 ### Added
