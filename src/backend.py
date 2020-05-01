@@ -121,3 +121,6 @@ class TuringChat():
             return b"u " + message.encode() + b"\n"
         else:
             return b""
+
+    def getMyFingerprint(self):
+        return self.key.getFingerprint()

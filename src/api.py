@@ -83,6 +83,8 @@ class Interface():
                 self.setUsername(arg)
             elif(command == "trust" and arg):
                 self.trustManager.setTrust(arg)
+            elif(command == "fingerprint"):
+                self.printMessage(self.turing.getMyFingerprint())
             elif(command == "help"):
                 helpText = "Voici les commandes disponibles :\n\
 - /listen : Démarre le serveur\n\
@@ -91,6 +93,7 @@ class Interface():
 - /help : Affiche ce message\n\
 - /nick <username>: Change username\n\
 - /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)\n\
+- /fingerprint: Affiche la fingerprint de ma clé\n\
 - message : Envoie un message"
                 self.printMessage(helpText)
             else:

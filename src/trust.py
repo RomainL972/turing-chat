@@ -34,6 +34,7 @@ class TrustManager():
     def checkTrust(self):
         if not self.currentFingerprint or self.forceTrusted:
             return
+        self.printMessage("Fingerprint du correspondant : " + self.currentFingerprint)
         if self.savedFingerprints and self.currentFingerprint in self.savedFingerprints:
             entry = self.savedFingerprints[self.currentFingerprint]
             if entry["level"] == "always":
@@ -43,8 +44,8 @@ class TrustManager():
                 self.printMessage("Cette clé est dans votre blacklist")
                 self.trusted = False
         else:
-            self.printMessage("Fingerprint inconnue " + self.currentFingerprint)
-            self.printMessage("Utilisez /trust pour choisir un niveau de confiance")
+            self.printMessage("Clé inconnue")
+        self.printMessage("Utilisez /trust pour choisir un niveau de confiance")
 
     def setTrust(self, level):
         level = int(level)
