@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Trust functionnality
 
 ### Fixed
+- Messages received when connexion not trusted are buffered instead of diplayed
 - Handle UPnP port mapping removal exception
 - Don't print starting server when immediatly closing it
 
