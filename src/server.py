@@ -53,6 +53,7 @@ class SocketServer(Thread):
         except OSError:
             self.rdyRead("Couldn't start listening")
             self.stop()
+            self.close()
 
     def close(self):
         """ Close the client socket threads and server socket
