@@ -31,7 +31,7 @@ class TrustManager():
                 f.write(fingerprint + "," + entry["level"] + "\n")
 
     def checkTrust(self):
-        if not self.currentFingerprint or self.forceTrusted:
+        if not self.currentFingerprint:
             return
         self.printMessage("Fingerprint du correspondant : " + self.currentFingerprint)
         if self.savedFingerprints and self.currentFingerprint in self.savedFingerprints:
@@ -44,7 +44,7 @@ class TrustManager():
                 self.trusted = False
         else:
             self.printMessage("Clé inconnue")
-        self.printMessage("Utilisez /trust pour choisir un niveau de confiance")
+        self.printMessage("Utilisez /trust pour changer le niveau de confiance")
 
     def setTrust(self, level):
         level = int(level)
@@ -75,5 +75,4 @@ class TrustManager():
             self.printMessage("Confiance enregistrée")
 
     def connexionTrusted(self):
-        self.checkTrust()
         return self.trusted or self.forceTrusted
