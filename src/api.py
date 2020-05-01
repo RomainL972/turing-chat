@@ -2,6 +2,7 @@ from client import SocketClient
 from server import SocketServer
 from backend import TuringChat
 from trust import TrustManager
+from translate import tr
 import re
 
 
@@ -58,7 +59,7 @@ class Interface():
         self.username = username
         if self.connexion:
             self.connexion.send(self.turing.createMessage("username", username))
-        self.printMessage("Username changed to " + username)
+        self.printMessage(tr("username.changed") + username)
 
     def parseCommand(self, command):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
@@ -88,24 +89,16 @@ class Interface():
             elif(command == "fingerprint"):
                 self.printMessage(self.turing.getMyFingerprint())
             elif(command == "help"):
-                helpText = "Voici les commandes disponibles :\n\
-- /listen : Démarre le serveur\n\
-- /connect [adresse] : Connecte le client à un serveur\n\
-- /quit : Arrête le programme\n\
-- /help : Affiche ce message\n\
-- /nick <username>: Change username\n\
-- /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)\n\
-- /fingerprint: Affiche la fingerprint de ma clé\n\
-- message : Envoie un message"
+                helpText = tr("command.help.text")
                 self.printMessage(helpText)
             else:
-                self.printMessage("Incorrect command")
+                self.printMessage(tr("error.incorrect.command"))
         else:
             if not self.connexion:
-                self.printMessage("Not connected")
+                self.printMessage(tr("error.not.connected"))
                 return
             if not self.trustManager.connexionTrusted():
-                self.printMessage("Connexion not trusted")
+                self.printMessage(tr("error.connexion.not.trusted"))
                 return
-            self.printMessage("Vous : "+command)
+            self.printMessage(tr("user.you") + command)
             self.connexion.send(self.turing.createMessage("message", command))
