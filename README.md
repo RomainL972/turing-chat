@@ -19,6 +19,7 @@ obtenir Python sur [le site officiel](https://www.python.org/downloads/). Pour l
 ```
 pip install -r requirements
 ```
+Vous pouvez aussi télécharger gmpy2 pour Windows sur [ce site](//www.lfd.uci.edu/~gohlke/pythonlibs/#gmpy).
 
 ## Utilisation
 Le programme n'est pas encore fini! Vous pourriez rencontrer des bugs ou des problèmes. Vous pouvez lancer le fichier
