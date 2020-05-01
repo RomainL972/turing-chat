@@ -24,9 +24,11 @@ class Interface():
         if message and not self.trustManager.connexionTrusted():
             self.msgBuffer.append((text, message, username))
         else:
-            for element in self.msgBuffer:
-                self.uiPrintMessage(element[0], element[1], element[2])
             self.uiPrintMessage(text, message, username)
+        if self.trustManager.connexionTrusted():
+                for element in self.msgBuffer:
+                    self.uiPrintMessage(element[0], element[1], element[2])
+                self.msgBuffer = []
 
     def writeMessages(self, connexion, fingerprint=None):
         self.connexion = connexion
