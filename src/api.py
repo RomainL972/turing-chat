@@ -10,7 +10,7 @@ class Interface():
         self.turing = TuringChat()
         self.client = None
         self.server = None
-        self.printMessage = recvMessage
+        self.uiPrintMessage = recvMessage
         self.sendQuit = sendQuit
         self.connexion = None
         self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
@@ -18,6 +18,15 @@ class Interface():
         self.username = None
         self.otherUsername = None
         self.trustManager = TrustManager(self.printMessage)
+        self.msgBuffer = []
+
+    def printMessage(self, text, message=False, username=None):
+        if message and not self.trustManager.connexionTrusted():
+            self.msgBuffer.append((text, message, username))
+        else:
+            for element in self.msgBuffer:
+                self.uiPrintMessage(element[0], element[1], element[2])
+            self.uiPrintMessage(text, message, username)
 
     def writeMessages(self, connexion, fingerprint=None):
         self.connexion = connexion
