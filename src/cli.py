@@ -7,6 +7,7 @@ ERASE_LINE = '\x1b[2K'
 
 interface = None
 
+
 def printMessage(text, message=False, username=None):
     global interface
     if username:

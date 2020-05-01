@@ -8,9 +8,11 @@ wd = Tk()
 interface = None
 stop = False
 
+
 def quit():
     wd.quit()
     exit()
+
 
 def disc():
     global interface

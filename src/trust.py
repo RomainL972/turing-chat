@@ -1,5 +1,4 @@
 import os
-import csv
 
 
 class TrustManager():
@@ -28,7 +27,7 @@ class TrustManager():
 
     def saveFingerprints(self):
         with open(self.trustFile, "w") as f:
-            for fingerprint,entry in self.savedFingerprints.items():
+            for fingerprint, entry in self.savedFingerprints.items():
                 f.write(fingerprint + "," + entry["level"] + "\n")
 
     def checkTrust(self):

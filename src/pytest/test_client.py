@@ -1,18 +1,19 @@
-import pytest
 import sys
 import os
 import socket
 import threading
-import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import client
 import backend
+
 
 # We give this empty function to rdyWriteFunc arg in client
 def empty_func(arg):
     pass
 
-i=0
+
+i = 0
+
 
 def test_connectWithoutServer():
     global i
@@ -29,6 +30,7 @@ def test_connectWithoutServer():
     assert i == 1
     c.close()
 
+
 def test_connect():
     global i
     i = 0
@@ -40,7 +42,7 @@ def test_connect():
             assert(msg == "Connected to ('127.0.0.1', 1234)")
         if i == 1:
             assert(msg == "ConnexionThread starting with ('127.0.0.1', 1234)")
-        i+=1
+        i += 1
     c = client.SocketClient(backend.TuringChat(False), test_output, empty_func)
 
     # We create a simple socket server
