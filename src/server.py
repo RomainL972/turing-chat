@@ -22,6 +22,7 @@ class SocketServer(Thread):
         self.port = port
         self.sock_threads = []
         self.sock = None
+        self.__stop = False
 
     def listening(self):
         return not not self.sock
@@ -70,14 +71,17 @@ class SocketServer(Thread):
             self.sock = None
 
         if self.upnpEnabled:
-            self.upnp.deleteportmapping(self.port, 'TCP')
+            try:
+                self.upnp.deleteportmapping(self.port, 'TCP')
+            except Exception:
+                self.rdyRead("Couldn't remove port mapping")
 
     def run(self):
         """ Accept an incoming connection.
         Start a new SocketServerThread that will handle the communication. """
-        self.rdyRead('Starting socket server (host {}, port {})'.format(self.host, self.port))
+        if not self.__stop:
+            self.rdyRead('Starting socket server (host {}, port {})'.format(self.host, self.port))
 
-        self.__stop = False
         while not self.__stop:
             if not self.sock:
                 continue

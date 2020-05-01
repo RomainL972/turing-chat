@@ -6,6 +6,7 @@ import os
 import binascii
 import gmpy2 as gmp
 import re
+import hashlib
 
 
 class RSAKey():
@@ -75,6 +76,10 @@ class RSAKey():
         result = rsa.decrypt(cypher, self.key["d"], self.key["n"])
         return binascii.unhexlify(result).decode()
 
+    def getFingerprint(self):
+        hash = hashlib.md5(self.key["n"].digits().encode()).hexdigest()
+        return ':'.join(hash[i:i + 2] for i in range(0, len(hash), 2))
+
 
 class TuringChat():
     def __init__(self, getKey=True):
@@ -93,7 +98,7 @@ class TuringChat():
             arg = regex.group(2)
             if command == "p":
                 self.otherKey.fromBase64(arg)
-                return "pubkey"
+                return "pubkey", self.otherKey.getFingerprint()
             elif command == "m":
                 return "message", self.key.decrypt(arg)
             elif command == "u":

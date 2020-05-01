@@ -47,8 +47,8 @@ class ConnexionThread(Thread):
                         if(self.message[-1] == "\n"):
                             try:
                                 result = self.turing.parseMessage(self.message)
-                                if(result == "pubkey"):
-                                    self.rdyWriteFunc(self)
+                                if(result[0] == "pubkey"):
+                                    self.rdyWriteFunc(self, result[1])
                                 elif(result[0] == "message"):
                                     self.rdyReadFunc(result[1], True)
                                 elif(result[0] == "username"):

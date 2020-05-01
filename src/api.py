@@ -1,6 +1,7 @@
 from client import SocketClient
 from server import SocketServer
 from backend import TuringChat
+from trust import TrustManager
 import re
 
 
@@ -16,9 +17,12 @@ class Interface():
         self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
         self.username = None
         self.otherUsername = None
+        self.trustManager = TrustManager(self.printMessage)
 
-    def writeMessages(self, connexion):
+    def writeMessages(self, connexion, fingerprint=None):
         self.connexion = connexion
+        if fingerprint:
+            self.trustManager.setCurrentFingerprint(fingerprint)
         if self.username and self.connexion:
             self.connexion.send(self.turing.createMessage("username", self.username))
 
@@ -68,6 +72,8 @@ class Interface():
                     self.startServer()
             elif(command == "nick" and arg):
                 self.setUsername(arg)
+            elif(command == "trust" and arg):
+                self.trustManager.setTrust(arg)
             elif(command == "help"):
                 helpText = "Voici les commandes disponibles :\n\
 - /listen : Démarre le serveur\n\
@@ -75,6 +81,7 @@ class Interface():
 - /quit : Arrête le programme\n\
 - /help : Affiche ce message\n\
 - /nick <username>: Change username\n\
+- /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)\n\
 - message : Envoie un message"
                 self.printMessage(helpText)
             else:
@@ -82,6 +89,9 @@ class Interface():
         else:
             if not self.connexion:
                 self.printMessage("Not connected")
+                return
+            if not self.trustManager.connexionTrusted():
+                self.printMessage("Connexion not trusted")
                 return
             self.printMessage("Vous : "+command)
             self.connexion.send(self.turing.createMessage("message", command))
