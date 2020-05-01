@@ -6,11 +6,11 @@ import re
 
 
 class Interface():
-    def __init__(self, recvMessage, sendQuit=None):
+    def __init__(self, uiPrintMessage, sendQuit=None):
         self.turing = TuringChat()
         self.client = None
         self.server = None
-        self.uiPrintMessage = recvMessage
+        self.uiPrintMessage = uiPrintMessage
         self.sendQuit = sendQuit
         self.connexion = None
         self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)

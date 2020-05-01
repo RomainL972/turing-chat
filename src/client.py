@@ -5,10 +5,10 @@ from connexion import ConnexionThread
 
 
 class SocketClient():
-    def __init__(self, turing, rdyRead, rdyWrite):
+    def __init__(self, turing, printMessage, rdyWrite):
         self.turing = turing
         self.sock = None
-        self.rdyRead = rdyRead
+        self.printMessage = printMessage
         self.rdyWrite = rdyWrite
         self.sock_thread = None
 
@@ -21,19 +21,19 @@ class SocketClient():
         try:
             self.sock.connect((host, port))
         except ConnectionRefusedError:
-            self.rdyRead("The connexion was refused")
+            self.printMessage("The connexion was refused")
             return
-        self.rdyRead("Connected to " + str(self.sock.getpeername()))
+        self.printMessage("Connected to " + str(self.sock.getpeername()))
 
         client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
-                                     self.turing, self.rdyRead, self.rdyWrite)
+                                     self.turing, self.printMessage, self.rdyWrite)
         self.sock_thread = client_thr
         client_thr.start()
 
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        self.rdyRead('Closing client socket')
+        self.printMessage('Closing client socket')
 
         if self.sock_thread:
             self.sock_thread.stop()

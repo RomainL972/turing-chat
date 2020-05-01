@@ -7,14 +7,14 @@ from threading import Thread
 
 
 class SocketServer(Thread):
-    def __init__(self, turing, rdyRead, rdyWrite, host='0.0.0.0', port=1234):
+    def __init__(self, turing, printMessage, rdyWrite, host='0.0.0.0', port=1234):
         """ Initialize the server with a host and port to listen to.
         Provide a list of functions that will be used when receiving specific
         data """
         Thread.__init__(self)
 
         self.turing = turing
-        self.rdyRead = rdyRead
+        self.printMessage = printMessage
         self.rdyWrite = rdyWrite
         self.upnpEnabled = False
         self.upnpAvailable = False
@@ -40,26 +40,26 @@ class SocketServer(Thread):
                     self.upnp.addportmapping(
                         self.port, 'TCP', self.upnp.lanaddr, self.port, 'TuringChat', ''
                     )
-                    self.rdyRead("You're external IP is " + self.upnp.externalipaddress())
+                    self.printMessage("You're external IP is " + self.upnp.externalipaddress())
                     self.upnpEnabled = True
                 except Exception:
-                    self.rdyRead("Couldn't add port mapping")
+                    self.printMessage("Couldn't add port mapping")
         except ImportError:
-            self.rdyRead("Couldn't load UPnP module")
+            self.printMessage("Couldn't load UPnP module")
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.sock.bind((self.host, self.port))
             self.sock.listen(1)
         except OSError:
-            self.rdyRead("Couldn't start listening")
+            self.printMessage("Couldn't start listening")
             self.stop()
             self.close()
 
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        self.rdyRead('Closing server socket (host {}, port {})'.format(self.host, self.port))
+        self.printMessage('Closing server socket (host {}, port {})'.format(self.host, self.port))
 
         for thr in self.sock_threads:
             thr.stop()
@@ -74,13 +74,13 @@ class SocketServer(Thread):
             try:
                 self.upnp.deleteportmapping(self.port, 'TCP')
             except Exception:
-                self.rdyRead("Couldn't remove port mapping")
+                self.printMessage("Couldn't remove port mapping")
 
     def run(self):
         """ Accept an incoming connection.
         Start a new SocketServerThread that will handle the communication. """
         if not self.__stop:
-            self.rdyRead('Starting socket server (host {}, port {})'.format(self.host, self.port))
+            self.printMessage('Starting socket server (host {}, port {})'.format(self.host, self.port))
 
         while not self.__stop:
             if not self.sock:
@@ -93,7 +93,7 @@ class SocketServer(Thread):
 
             if client_sock:
                 client_thr = ConnexionThread(client_sock, client_addr,
-                                             self.turing, self.rdyRead,
+                                             self.turing, self.printMessage,
                                              self.rdyWrite)
                 self.sock_threads.append(client_thr)
                 client_thr.start()
