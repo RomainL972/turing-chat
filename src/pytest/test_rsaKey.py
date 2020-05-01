@@ -66,3 +66,7 @@ def test_fromBase64(rsa_key, empty_rsa_key):
     empty_rsa_key.fromBase64("eyJuIjogImQ3MWM2NjAxM2VhZWU0ODUyZmU3Nzk3ZTRlMmFlZ\
 WVkIiwgImUiOiAiMTAwMDEiLCAiZCI6ICIyM2NhYTk1YzRlYWEzYTAyNzMwZjk2NWE4YTM5MDNkMSJ9")
     assert empty_rsa_key.key == rsa_key.key
+
+def test_getFingerprint(rsa_key, empty_rsa_key):
+    assert empty_rsa_key.getFingerprint() == ''
+    assert rsa_key.getFingerprint() == "2d:d5:66:ed:70:88:53:cb:4f:f5:1e:ed:25:76:b7:e9"

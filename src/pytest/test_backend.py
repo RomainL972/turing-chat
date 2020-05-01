@@ -19,7 +19,8 @@ def turing():
 
 def test_parseMessage(turing):
     assert turing.parseMessage('m a340911b28e27faffbb490c0fad27e29\n') == ("message", "salut les amis")
-    assert turing.parseMessage("p eyJuIjogImQ3MWM2NjAxM2VhZWU0ODUyZmU3Nzk3ZTRlMmFlZWVkIiwgImUiOiAiMTAwMDEifQ==\n") == "pubkey"
+    assert turing.parseMessage("p eyJuIjogImQ3MWM2NjAxM2VhZWU0ODUyZmU3Nzk3ZTRlMmFlZWVkIiwgImUiOiAiMTAwMDEifQ==\n") == ("pubkey", '\
+2d:d5:66:ed:70:88:53:cb:4f:f5:1e:ed:25:76:b7:e9')
     with pytest.raises(ValueError):
         turing.parseMessage("test salut\n")
     with pytest.raises(ValueError):

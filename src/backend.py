@@ -77,6 +77,8 @@ class RSAKey():
         return binascii.unhexlify(result).decode()
 
     def getFingerprint(self):
+        if self.isEmpty():
+            return ''
         hash = hashlib.md5(self.key["n"].digits().encode()).hexdigest()
         return ':'.join(hash[i:i + 2] for i in range(0, len(hash), 2))
 
