@@ -7,6 +7,7 @@ import binascii
 import gmpy2 as gmp
 import re
 import hashlib
+from translate import tr
 
 
 class RSAKey():
@@ -106,9 +107,9 @@ class TuringChat():
             elif command == "u":
                 return "username", arg
             else:
-                raise ValueError("Incorrect command : " + command)
+                raise ValueError(tr("error.incorrect.command") + " : " + command)
         else:
-            raise ValueError("Incorrect message : " + message)
+            raise ValueError(tr("error.incorrect.message") + " : " + message)
 
     def createMessage(self, type, message=None):
         if type == "pubkey":

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Trust functionnality
+- Translation of all messages in French
 
 ### Fixed
 - Messages received when connexion not trusted are buffered instead of diplayed

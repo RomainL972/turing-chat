@@ -2,6 +2,7 @@
 from tkinter import *
 import api
 from threading import Thread
+from translate import tr
 
 wd = Tk()
 
@@ -19,7 +20,7 @@ def disc():
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
-    label = Label(wd, text="vous etes connecté", font=("courrier", 22), bg="#56646A", fg="white")
+    label = Label(wd, text=tr("status.connected"), font=("courrier", 22), bg="#56646A", fg="white")
     label.pack(side=TOP)
     messages_frame = Frame(wd)
     scrollbar = Scrollbar(messages_frame)
@@ -34,16 +35,16 @@ def disc():
     def writeMsg(msg, message=False, username=None):
         if username:
             interface.otherUsername = username
-            return writeMsg("Correspondant username changed to " + username)
+            return writeMsg(tr("username.other.changed") + username)
         global stop
         if stop:
             return
         msg_list.config(state=NORMAL)
         if message:
-            username = interface.otherUsername
+            username = interface.otherUsername + " : "
             if(not username):
-                username = "L'autre"
-            msg_list.insert(END, username + " : ")
+                username = tr("user.other")
+            msg_list.insert(END, username)
         msg_list.insert(END, msg + "\n")
         msg_list.config(state=DISABLED)
 
@@ -57,7 +58,7 @@ def disc():
 
 
 # creer une fenetre
-wd.title("TuringChat")
+wd.title(tr("app.title"))
 
 wd.geometry("1180x720")
 wd.minsize(700, 600)
@@ -67,16 +68,15 @@ wd.config(bg="#56646A")
 # creer frame
 frame = Frame(wd, bg="#56646A")
 # creer Titre
-label_title = Label(frame, text="bienvenue sur TuringChat", font=("Courrier", 45), bg="#56646A", fg="white")
+label_title = Label(frame, text=tr("message.welcome"), font=("Courrier", 45), bg="#56646A", fg="white")
 label_title.pack()
 
 # creer sous titre
-label_subtitle = Label(frame, text="la nouvelle messagerie instantanée ultrasecurisé!!! \
-meme la NSA nous utilise, PS : laissez nous rever", font=("courrier", 25), bg="#56646A", fg="white")
+label_subtitle = Label(frame, text=tr("message.description"), font=("courrier", 25), bg="#56646A", fg="white")
 label_subtitle.pack()
 
 # bouton connection
-btn = Button(frame, text="connexion", font=("courrier", 22), bg="white", fg="#56646A", command=disc)
+btn = Button(frame, text=tr("message.connexion"), font=("courrier", 22), bg="white", fg="#56646A", command=disc)
 btn.pack(fill=X)
 frame.pack(expand=YES)
 

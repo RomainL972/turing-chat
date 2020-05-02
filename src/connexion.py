@@ -1,5 +1,6 @@
 import select
 from threading import Thread
+from translate import tr
 
 
 class ConnexionThread(Thread):
@@ -22,7 +23,7 @@ class ConnexionThread(Thread):
                 self.socket.send(text)
 
     def run(self):
-        self.printMessage("ConnexionThread starting with {}".format(self.addr))
+        self.printMessage(tr("connexion.thread.start").format(self.addr))
         self.socket.send(self.turing.createMessage("pubkey"))
         self.__stop = False
         while not self.__stop:
@@ -31,7 +32,7 @@ class ConnexionThread(Thread):
                     rdy_read, rdy_write, sock_err = select.select(
                         [self.socket], [self.socket], [], 5)
                 except select.error:
-                    self.printMessage('Select() failed on socket with {}'.format(self.addr))
+                    self.printMessage(tr("error.select.failed").format(self.addr))
                     self.stop()
                     return
 
@@ -40,7 +41,7 @@ class ConnexionThread(Thread):
 
                     # Check if socket has been closed
                     if len(read_data) == 0:
-                        self.printMessage('Closed the socket {}.'.format(self.addr))
+                        self.printMessage(tr("socket.closed").format(self.addr))
                         self.stop()
                     else:
                         self.message += read_data.decode()
@@ -54,10 +55,10 @@ class ConnexionThread(Thread):
                                 elif(result[0] == "username"):
                                     self.printMessage("", username=result[1])
                             except ValueError:
-                                self.printMessage("Unknown message type received")
+                                self.printMessage(tr("error.message.unknown"))
                             self.message = ""
             else:
-                self.printMessage("No connection, ConnexionThread can't receive data")
+                self.printMessage(tr("error.connexionthread.not.connected"))
                 self.stop()
         self.close()
 
@@ -68,5 +69,5 @@ class ConnexionThread(Thread):
     def close(self):
         """ Close connection with the client socket. """
         if self.socket:
-            self.printMessage('Closing connection with {}'.format(self.addr))
+            self.printMessage(tr("connexion.closing").format(self.addr))
             self.socket.close()

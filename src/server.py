@@ -2,7 +2,7 @@
 
 import socket
 from connexion import ConnexionThread
-
+from translate import tr
 from threading import Thread
 
 
@@ -38,28 +38,28 @@ class SocketServer(Thread):
                     if(self.upnp.getspecificportmapping(self.port, "TCP")):
                         self.upnp.deleteportmapping(self.port, 'TCP')
                     self.upnp.addportmapping(
-                        self.port, 'TCP', self.upnp.lanaddr, self.port, 'TuringChat', ''
+                        self.port, 'TCP', self.upnp.lanaddr, self.port, tr("app.title"), ''
                     )
-                    self.printMessage("You're external IP is " + self.upnp.externalipaddress())
+                    self.printMessage(tr("upnp.external.ip") + self.upnp.externalipaddress())
                     self.upnpEnabled = True
                 except Exception:
-                    self.printMessage("Couldn't add port mapping")
+                    self.printMessage(tr("upnp.error.add"))
         except ImportError:
-            self.printMessage("Couldn't load UPnP module")
+            self.printMessage(tr("upnp.error.load"))
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.sock.bind((self.host, self.port))
             self.sock.listen(1)
         except OSError:
-            self.printMessage("Couldn't start listening")
+            self.printMessage(tr("error.server.listening"))
             self.stop()
             self.close()
 
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        self.printMessage('Closing server socket (host {}, port {})'.format(self.host, self.port))
+        self.printMessage(tr("server.closing").format(self.host, self.port))
 
         for thr in self.sock_threads:
             thr.stop()
@@ -74,13 +74,13 @@ class SocketServer(Thread):
             try:
                 self.upnp.deleteportmapping(self.port, 'TCP')
             except Exception:
-                self.printMessage("Couldn't remove port mapping")
+                self.printMessage(tr("upnp.error.remove"))
 
     def run(self):
         """ Accept an incoming connection.
         Start a new SocketServerThread that will handle the communication. """
         if not self.__stop:
-            self.printMessage('Starting socket server (host {}, port {})'.format(self.host, self.port))
+            self.printMessage(tr("server.starting").format(self.host, self.port))
 
         while not self.__stop:
             if not self.sock:

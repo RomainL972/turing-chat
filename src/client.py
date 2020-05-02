@@ -2,6 +2,7 @@
 
 import socket
 from connexion import ConnexionThread
+from translate import tr
 
 
 class SocketClient():
@@ -21,9 +22,9 @@ class SocketClient():
         try:
             self.sock.connect((host, port))
         except ConnectionRefusedError:
-            self.printMessage("The connexion was refused")
+            self.printMessage(tr("error.connexion.refused"))
             return
-        self.printMessage("Connected to " + str(self.sock.getpeername()))
+        self.printMessage("connected.to" + str(self.sock.getpeername()))
 
         client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
                                      self.turing, self.printMessage, self.rdyWrite)
@@ -33,7 +34,7 @@ class SocketClient():
     def close(self):
         """ Close the client socket threads and server socket
         if they exists. """
-        self.printMessage('Closing client socket')
+        self.printMessage(tr("socket.client.close"))
 
         if self.sock_thread:
             self.sock_thread.stop()
