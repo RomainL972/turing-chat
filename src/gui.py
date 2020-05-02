@@ -41,10 +41,10 @@ def disc():
             return
         msg_list.config(state=NORMAL)
         if message:
-            username = interface.otherUsername + " : "
+            username = interface.otherUsername
             if(not username):
                 username = tr("user.other")
-            msg_list.insert(END, username)
+            msg_list.insert(END, username + " : ")
         msg_list.insert(END, msg + "\n")
         msg_list.config(state=DISABLED)
 

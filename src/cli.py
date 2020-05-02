@@ -15,10 +15,10 @@ def printMessage(text, message=False, username=None):
         interface.otherUsername = username
         return printMessage(tr("username.other.changed") + username)
     if message:
-        username = interface.otherUsername + " : "
+        username = interface.otherUsername
         if(not username):
             username = tr("user.other")
-        print("\r" + ERASE_LINE + username + text + "\n" + tr("command") + " : ", end="")
+        print("\r" + ERASE_LINE + username + " : " + text + "\n" + tr("command") + " : ", end="")
     else:
         print("\r" + ERASE_LINE + text + "\n" + tr("command") + " : ", end="")
 

@@ -22,7 +22,7 @@ frMessages = {
     "socket.client.close": "Fermeture du socket du client",
     "socket.closed": "Socket fermé sur {}",
     "user.you": "Vous : ",
-    "user.other": "L'autre : ",
+    "user.other": "L'autre",
     "username.changed": "Votre username est maintenant ",
     "username.other.changed": "Le username de votre contact est ",
     "connexion.thread.start": "Démarrage du ConnexionThread avec {}",
