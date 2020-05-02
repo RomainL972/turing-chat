@@ -5,6 +5,7 @@ import threading
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import client
 import backend
+from translate import tr
 
 
 # We give this empty function to rdyWriteFunc arg in client
@@ -23,7 +24,7 @@ def test_connectWithoutServer():
     def test_output(msg, logging=False):
         global i
         if i == 0:
-            assert msg == "The connexion was refused"
+            assert msg == tr("error.connexion.refused")
         i += 1
     c = client.SocketClient(backend.TuringChat(False), test_output, empty_func)
     c.connect("127.0.0.1", 1234)
@@ -39,9 +40,9 @@ def test_connect():
     def test_output(msg, logging=False):
         global i
         if i == 0:
-            assert(msg == "Connected to ('127.0.0.1', 1234)")
+            assert(msg == tr("connected.to") + "('127.0.0.1', 1234)")
         if i == 1:
-            assert(msg == "ConnexionThread starting with ('127.0.0.1', 1234)")
+            assert(msg == tr("connexion.thread.start").format("('127.0.0.1', 1234)"))
         i += 1
     c = client.SocketClient(backend.TuringChat(False), test_output, empty_func)
 

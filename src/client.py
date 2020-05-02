@@ -24,7 +24,7 @@ class SocketClient():
         except ConnectionRefusedError:
             self.printMessage(tr("error.connexion.refused"))
             return
-        self.printMessage("connected.to" + str(self.sock.getpeername()))
+        self.printMessage(tr("connected.to") + str(self.sock.getpeername()))
 
         client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
                                      self.turing, self.printMessage, self.rdyWrite)
