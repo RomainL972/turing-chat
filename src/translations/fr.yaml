@@ -2,14 +2,14 @@ command:
     label: Commande
     help:
         text: |
-            Voici les commandes disponibles :\n\
-            - /listen : Démarre le serveur\n\
-            - /connect [adresse] : Connecte le client à un serveur\n\
-            - /quit : Arrête le programme\n\
-            - /help : Affiche ce message\n\
-            - /nick <username>: Change username\n\
-            - /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)\n\
-            - /fingerprint: Affiche la fingerprint de ma clé\n\
+            Voici les commandes disponibles :
+            - /listen : Démarre le serveur
+            - /connect [adresse] : Connecte le client à un serveur
+            - /quit : Arrête le programme
+            - /help : Affiche ce message
+            - /nick <username>: Changer le username
+            - /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)
+            - /fingerprint: Affiche la fingerprint de ma clé
             - message : Envoie un message
 error:
     incorrect:
