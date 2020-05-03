@@ -1,6 +1,10 @@
 import yaml
+import os
 
-with open("translations/fr.yaml", 'r') as stream:
+script_dir = os.path.dirname(__file__)
+rel_path = "translations/fr.yaml"
+
+with open(os.path.join(script_dir, rel_path), 'r') as stream:
     try:
         data = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
