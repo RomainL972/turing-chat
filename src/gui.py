@@ -22,13 +22,8 @@ def disc():
     msg = StringVar()  # pour le message qui sera envoyé
     label = Label(wd, text=tr("status.connected"), font=("courrier", 22), bg="#56646A", fg="white")
     label.pack(side=TOP)
-    messages_frame = Frame(wd)
-    scrollbar = Scrollbar(messages_frame)
-    msg_list = Text(messages_frame, bg="#545454", height=30, width=100, yscrollcommand=set, state=DISABLED)
-    scrollbar.pack(side=RIGHT, fill=Y)
-    msg_list.pack(side=LEFT, fill=BOTH)
+    msg_list = Text(wd, bg="#545454", height=30, width=100, state=DISABLED)
     msg_list.pack()
-    messages_frame.pack()
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chp.pack(side=BOTTOM, pady=10)
 
@@ -46,6 +41,7 @@ def disc():
                 username = tr("user.other")
             msg_list.insert(END, username + " : ")
         msg_list.insert(END, msg + "\n")
+        msg_list.see(END)
         msg_list.config(state=DISABLED)
 
     interface = api.Interface(writeMsg, quit)
@@ -61,7 +57,7 @@ def disc():
 wd.title(tr("app.title"))
 
 wd.geometry("1180x720")
-wd.minsize(700, 600)
+wd.minsize(900, 650)
 wd.maxsize(1920, 1080)
 wd.config(bg="#56646A")
 
