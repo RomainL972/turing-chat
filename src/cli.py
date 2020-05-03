@@ -31,7 +31,7 @@ while True:
         print(CURSOR_UP_ONE + ERASE_LINE, end="")
     except (KeyboardInterrupt, EOFError):
         text = "/quit"
-    print(CURSOR_UP_ONE + ERASE_LINE, end="")
+        print("\r" + ERASE_LINE, end="")
     if text:
         res = interface.parseCommand(text)
         if(res == "quit"):
