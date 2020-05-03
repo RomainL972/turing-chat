@@ -18,17 +18,18 @@ def printMessage(text, message=False, username=None):
         username = interface.otherUsername
         if(not username):
             username = tr("user.other")
-        print("\r" + ERASE_LINE + username + " : " + text + "\n" + tr("command") + " : ", end="")
+        print("\r" + ERASE_LINE + username + " : " + text + "\n" + tr("command.label") + " : ", end="")
     else:
-        print("\r" + ERASE_LINE + text + "\n" + tr("command") + " : ", end="")
+        print("\r" + ERASE_LINE + text + "\n" + tr("command.label") + " : ", end="")
 
 
 interface = Interface(printMessage)
 
 while True:
     try:
-        text = input("\r" + tr("command") + " : ")
-    except KeyboardInterrupt:
+        text = input("\r" + tr("command.label") + " : ")
+        print(CURSOR_UP_ONE + ERASE_LINE, end="")
+    except (KeyboardInterrupt, EOFError):
         text = "/quit"
     print(CURSOR_UP_ONE + ERASE_LINE, end="")
     if text:

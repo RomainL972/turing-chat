@@ -1,0 +1,79 @@
+command:
+    label: Commande
+    help:
+        text: |
+            Voici les commandes disponibles :\n\
+            - /listen : Démarre le serveur\n\
+            - /connect [adresse] : Connecte le client à un serveur\n\
+            - /quit : Arrête le programme\n\
+            - /help : Affiche ce message\n\
+            - /nick <username>: Change username\n\
+            - /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)\n\
+            - /fingerprint: Affiche la fingerprint de ma clé\n\
+            - message : Envoie un message
+error:
+    incorrect:
+        command: "Commande incorrecte"
+        message: "Message incorrect"
+    connexion:
+        not:
+            trusted: "La connexion n'est pas fiable"
+        refused: "La connexion a été refusée"
+    not:
+        connected: "Vous n'êtes pas connecté"
+    select:
+        failed: "Échec du select() sur le socket avec {}"
+    message:
+        unknown: "Message de type inconnu reçu"
+    connexionthread:
+        not:
+            connected: "Pas de connexion, ConnexionThread ne peut pas recevoir de données"
+    server:
+        listening: "Le serveur n'a pas pu démarrer"
+connected:
+    to: "Connecté à "
+socket:
+    client:
+        close: "Fermeture du socket du client"
+    closed: "Socket fermé sur {}"
+user:
+    you: "Vous : "
+    other: "L'autre"
+username:
+    changed: "Votre username est maintenant "
+    other:
+        changed: "Le username de votre contact est "
+connexion:
+    thread:
+        start: "Démarrage du ConnexionThread avec {}"
+    closing: "Fermeture de la connexion avec {}"
+server:
+    starting: "Démarrage du server (hôte {}, port {})"
+    closing: "Fermeture du serveur (hôte {}, port {})"
+status:
+    connected: "Vous êtes connecté"
+app:
+    title: "TuringChat"
+message:
+    welcome: "Bienvenue sur TuringChat"
+    connexion: "Connexion"
+    description: |
+        La nouvelle messagerie instantanée ultrasécurisée!!!
+        Même la NSA nous utilise, PS: laissez nous rêver
+upnp:
+    external:
+        ip: "Votre adresse IP publique est "
+    error:
+        add: "Échec de l'ajout du port mapping"
+        load: "Échec du chargement du module UPnP"
+        remove: "Échec de la suppression du port mapping"
+fingerprint:
+    other: "Fingerprint du correspondant"
+trust:
+    whitelist: "Cette clé est dans votre whitelist"
+    blacklist: "Cette clé est dans votre blacklist"
+    unknown: "Clé inconnue"
+    usage: "Utilisez /trust pour changer le niveau de confiance"
+    saved:
+        blacklist: "Blacklist enregistré"
+        whitelist: "Confiance enregistrée"
