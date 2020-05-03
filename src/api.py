@@ -3,6 +3,7 @@ from server import SocketServer
 from backend import TuringChat
 from trust import TrustManager
 from translate import tr
+from settings import Settings
 import re
 
 
@@ -20,6 +21,7 @@ class Interface():
         self.otherUsername = None
         self.trustManager = TrustManager(self.printMessage)
         self.msgBuffer = []
+        self.settings = Settings(self.printMessage)
 
     def printMessage(self, text, message=False, username=None):
         if message and not self.trustManager.connexionTrusted():

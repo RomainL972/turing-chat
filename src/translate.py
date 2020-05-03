@@ -1,14 +1,19 @@
 import yaml
 import os
 
-script_dir = os.path.dirname(__file__)
-rel_path = "translations/fr.yaml"
+data = {}
 
-with open(os.path.join(script_dir, rel_path), 'r') as stream:
-    try:
-        data = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
+def loadMessages(language="fr"):
+    global data
+
+    script_dir = os.path.dirname(__file__)
+    rel_path = "translations/" + language + ".yaml"
+
+    with open(os.path.join(script_dir, rel_path), 'r') as stream:
+        try:
+            data = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
 
 def getMessage(data, keys):
     if isinstance(data, str):
@@ -19,3 +24,5 @@ def getMessage(data, keys):
 def tr(message):
     keys = message.split(".")
     return getMessage(data, keys)
+
+loadMessages()
