@@ -85,6 +85,9 @@ class Interface():
                 if(command == "connect"):
                     if not arg:
                         arg = "127.0.0.1"
+                    elif arg == "last":
+                        arg = self.settings.getSetting("lastHost")
+                    self.settings.setSetting("lastHost", arg)
                     self.startClient(arg)
                 else:
                     self.startServer()

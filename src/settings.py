@@ -13,7 +13,8 @@ class Settings():
     def getDefaultSettings(self):
         return {
             "username": "User",
-            "language": "fr"
+            "language": "fr",
+            "lastHost": "127.0.0.1"
         }
 
     def getSettingsFile(self):
@@ -30,7 +31,10 @@ class Settings():
         self.saveSettings()
 
     def getSetting(self, setting):
-        return self.settings[setting]
+        try:
+            return self.settings[setting]
+        except KeyError:
+            return self.getDefaultSettings()[setting]
 
     def saveSettings(self):
         with open(self.settingsFile, "w") as f:
