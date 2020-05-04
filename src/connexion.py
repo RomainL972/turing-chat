@@ -46,16 +46,19 @@ class ConnexionThread(Thread):
                     else:
                         self.message += read_data.decode()
                         if(self.message[-1] == "\n"):
-                            try:
-                                result = self.turing.parseMessage(self.message)
-                                if(result[0] == "pubkey"):
-                                    self.rdyWriteFunc(self, result[1])
-                                elif(result[0] == "message"):
-                                    self.printMessage(result[1], True)
-                                elif(result[0] == "username"):
-                                    self.printMessage("", username=result[1])
-                            except ValueError:
-                                self.printMessage(tr("error.message.unknown"))
+                            messages = self.message.split("\n")
+                            messages.pop()
+                            for message in messages:
+                                try:
+                                    result = self.turing.parseMessage(message)
+                                    if(result[0] == "pubkey"):
+                                        self.rdyWriteFunc(self, result[1])
+                                    elif(result[0] == "message"):
+                                        self.printMessage(result[1], True)
+                                    elif(result[0] == "username"):
+                                        self.printMessage("", username=result[1])
+                                except ValueError:
+                                    self.printMessage(tr("error.message.unknown"))
                             self.message = ""
             else:
                 self.printMessage(tr("error.connexionthread.not.connected"))

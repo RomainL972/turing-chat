@@ -48,7 +48,8 @@ class Interface():
 
     def stopServer(self):
         if self.server.listening() or self.server.isStopped():
-            self.server.stop()
+            if not self.server.isStopped():
+                self.server.stop()
             self.server.join()
             self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
 
