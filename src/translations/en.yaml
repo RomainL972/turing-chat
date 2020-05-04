@@ -10,6 +10,7 @@ command:
             - /nick <username>: Change username
             - /trust <level>: Choose trust level (0: never, 1: once, 2: always)
             - /fingerprint: Show the fingerprint of my public key
+            - /language <en/fr>: Set the language
             - message : Send a message
 error:
     incorrect:
@@ -77,3 +78,5 @@ trust:
     saved:
         blacklist: "Blacklist saved"
         whitelist: "Trust saved"
+language:
+    set: Language set to English

@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.1.0] - 2020-05-03
 ### Added
 - Trust functionnality
 - Translation of all messages in French
 - Translation of all messages in English
-- Settings
+- Persistent settings for username and language
+- Translation language can be changed during execution
 
 ### Fixed
 - Messages received when connexion not trusted are buffered instead of diplayed
@@ -230,7 +231,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic server and client
 - Use regex to parse commands
 
-[Unreleased]: https://github.com/RomainL972/isn/compare/v2.0.0...HEAD
+[2.1.0]: https://github.com/RomainL972/isn/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/RomainL972/isn/compare/v1.1.1...v2.0.0
 [1.1.1]: https://github.com/RomainL972/isn/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/RomainL972/isn/compare/v1.0.0...v1.1.0

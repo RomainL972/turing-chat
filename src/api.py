@@ -2,13 +2,14 @@ from client import SocketClient
 from server import SocketServer
 from backend import TuringChat
 from trust import TrustManager
-from translate import tr
+from translate import Translate, setObject
 from settings import Settings
 import re
 
 
 class Interface():
     def __init__(self, uiPrintMessage, sendQuit=None):
+        self.settings = Settings(self.printMessage)
         self.turing = TuringChat()
         self.client = None
         self.server = None
@@ -17,11 +18,12 @@ class Interface():
         self.connexion = None
         self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
         self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
-        self.username = None
+        self.username = self.settings.getSetting("username")
         self.otherUsername = None
         self.trustManager = TrustManager(self.printMessage)
         self.msgBuffer = []
-        self.settings = Settings(self.printMessage)
+        self.translate = Translate(self.printMessage, self.settings.getSetting("language"))
+        setObject(self.translate)
 
     def printMessage(self, text, message=False, username=None):
         if message and not self.trustManager.connexionTrusted():
@@ -45,7 +47,7 @@ class Interface():
         self.server.start()
 
     def stopServer(self):
-        if self.server.listening():
+        if self.server.listening() or self.server.isStopped():
             self.server.stop()
             self.server.join()
             self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
@@ -59,9 +61,10 @@ class Interface():
 
     def setUsername(self, username):
         self.username = username
+        self.settings.setSetting("username", username)
         if self.connexion:
             self.connexion.send(self.turing.createMessage("username", username))
-        self.printMessage(tr("username.changed") + username)
+        self.printMessage(self.translate.tr("username.changed") + username)
 
     def parseCommand(self, command):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
@@ -90,17 +93,21 @@ class Interface():
                 self.trustManager.setTrust(arg)
             elif(command == "fingerprint"):
                 self.printMessage(self.turing.getMyFingerprint())
+            elif(command == "language" and (arg == "en" or arg == "fr")):
+                self.translate.setLanguage(arg)
+                self.settings.setSetting("language", arg)
+                self.printMessage(self.translate.tr("language.set"))
             elif(command == "help"):
-                helpText = tr("command.help.text")
+                helpText = self.translate.tr("command.help.text")
                 self.printMessage(helpText)
             else:
-                self.printMessage(tr("error.incorrect.command"))
+                self.printMessage(self.translate.tr("error.incorrect.command"))
         else:
             if not self.connexion:
-                self.printMessage(tr("error.not.connected"))
+                self.printMessage(self.translate.tr("error.not.connected"))
                 return
             if not self.trustManager.connexionTrusted():
-                self.printMessage(tr("error.connexion.not.trusted"))
+                self.printMessage(self.translate.tr("error.connexion.not.trusted"))
                 return
-            self.printMessage(tr("user.you") + command)
+            self.printMessage(self.translate.tr("user.you") + command)
             self.connexion.send(self.turing.createMessage("message", command))

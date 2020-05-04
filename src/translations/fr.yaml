@@ -10,6 +10,7 @@ command:
             - /nick <username>: Changer le username
             - /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)
             - /fingerprint: Affiche la fingerprint de ma clé
+            - /language <fr/en>: Choisir la langue
             - message : Envoie un message
 error:
     incorrect:
@@ -77,3 +78,5 @@ trust:
     saved:
         blacklist: "Blacklist enregistré"
         whitelist: "Confiance enregistrée"
+language:
+    set: Langue mise à Français

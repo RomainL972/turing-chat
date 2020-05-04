@@ -8,6 +8,7 @@ wd = Tk()
 
 interface = None
 stop = False
+msg_list = None
 
 
 def quit():
@@ -16,7 +17,7 @@ def quit():
 
 
 def disc():
-    global interface
+    global interface, writeMsgFunc, msg_list
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
@@ -27,24 +28,8 @@ def disc():
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chp.pack(side=BOTTOM, pady=10)
 
-    def writeMsg(msg, message=False, username=None):
-        if username:
-            interface.otherUsername = username
-            return writeMsg(tr("username.other.changed") + username)
-        global stop
-        if stop:
-            return
-        msg_list.config(state=NORMAL)
-        if message:
-            username = interface.otherUsername
-            if(not username):
-                username = tr("user.other")
-            msg_list.insert(END, username + " : ")
-        msg_list.insert(END, msg + "\n")
-        msg_list.see(END)
-        msg_list.config(state=DISABLED)
-
-    interface = api.Interface(writeMsg, quit)
+    #interface = api.Interface(writeMsg, quit)
+    writeMsgFunc = writeMsg
 
     def send(e):
         Thread(target=interface.parseCommand, args=[msg.get()]).start()
@@ -52,6 +37,24 @@ def disc():
 
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
 
+def writeMsg(msg, message=False, username=None):
+    if username:
+        interface.otherUsername = username
+        return writeMsg(tr("username.other.changed") + username)
+    global stop
+    if stop:
+        return
+    msg_list.config(state=NORMAL)
+    if message:
+        username = interface.otherUsername
+        if(not username):
+            username = tr("user.other")
+        msg_list.insert(END, username + " : ")
+    msg_list.insert(END, msg + "\n")
+    msg_list.see(END)
+    msg_list.config(state=DISABLED)
+
+interface = api.Interface(writeMsg, quit)
 
 # creer une fenetre
 wd.title(tr("app.title"))

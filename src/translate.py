@@ -1,28 +1,44 @@
 import yaml
 import os
 
-data = {}
+class Translate():
+    def __init__(self, printMessage, language):
+        self.printMessage = printMessage
+        self.language = language
+        self.messages = {}
+        self.loadTranslations()
 
-def loadMessages(language="fr"):
-    global data
+    def loadTranslations(self):
+        script_dir = os.path.dirname(__file__)
+        rel_path = "translations/" + self.language + ".yaml"
 
-    script_dir = os.path.dirname(__file__)
-    rel_path = "translations/" + language + ".yaml"
+        with open(os.path.join(script_dir, rel_path), 'r') as stream:
+            try:
+                self.messages = yaml.safe_load(stream)
+            except yaml.YAMLError as exc:
+                self.printMessage("error.yaml")
 
-    with open(os.path.join(script_dir, rel_path), 'r') as stream:
-        try:
-            data = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
+    def getMessage(self, data, keys):
+        if isinstance(data, str):
+            return data
+        key = keys.pop(0)
+        return self.getMessage(data[key], keys)
 
-def getMessage(data, keys):
-    if isinstance(data, str):
-        return data
-    key = keys.pop(0)
-    return getMessage(data[key], keys)
+    def tr(self, message):
+        keys = message.split(".")
+        return self.getMessage(self.messages, keys)
+
+    def setLanguage(self, language):
+        self.language = language
+        self.loadTranslations()
+
+translate = None
+
+def setObject(object):
+    global translate
+    translate = object
 
 def tr(message):
-    keys = message.split(".")
-    return getMessage(data, keys)
-
-loadMessages()
+    if translate:
+        return translate.tr(message)
+    return ""

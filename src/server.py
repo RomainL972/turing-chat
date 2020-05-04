@@ -23,6 +23,7 @@ class SocketServer(Thread):
         self.sock_threads = []
         self.sock = None
         self.__stop = False
+        self.stopped = False
 
     def listening(self):
         return not not self.sock
@@ -75,6 +76,8 @@ class SocketServer(Thread):
                 self.upnp.deleteportmapping(self.port, 'TCP')
             except Exception:
                 self.printMessage(tr("upnp.error.remove"))
+                
+        self.stopped = True
 
     def run(self):
         """ Accept an incoming connection.
@@ -101,3 +104,6 @@ class SocketServer(Thread):
 
     def stop(self):
         self.__stop = True
+
+    def isStopped(self):
+        return self.stopped
