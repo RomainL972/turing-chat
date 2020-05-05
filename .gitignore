@@ -4,3 +4,4 @@ __pycache__
 .pytest_cache
 trust.txt
 settings.yaml
+.mypy_cache

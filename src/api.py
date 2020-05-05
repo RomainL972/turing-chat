@@ -4,28 +4,28 @@ from backend import TuringChat
 from trust import TrustManager
 from translate import Translate, setObject
 from settings import Settings
+from typing import Callable, List, Tuple, Optional
+from connexion import ConnexionThread
 import re
 
 
 class Interface():
-    def __init__(self, uiPrintMessage, sendQuit=None):
-        self.settings = Settings(self.printMessage)
-        self.turing = TuringChat()
-        self.client = None
-        self.server = None
-        self.uiPrintMessage = uiPrintMessage
-        self.sendQuit = sendQuit
-        self.connexion = None
-        self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
-        self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
-        self.username = self.settings.getSetting("username")
-        self.otherUsername = None
-        self.trustManager = TrustManager(self.printMessage)
-        self.msgBuffer = []
-        self.translate = Translate(self.printMessage, self.settings.getSetting("language"))
+    def __init__(self, uiPrintMessage: Callable, sendQuit=None):
+        self.settings: Settings = Settings(self.printMessage)
+        self.turing: TuringChat = TuringChat()
+        self.uiPrintMessage: Callable = uiPrintMessage
+        self.sendQuit: Callable = sendQuit
+        self.connexion: Optional[ConnexionThread] = None
+        self.server: SocketServer = SocketServer(self.turing, self.printMessage, self.writeMessages)
+        self.client: SocketClient = SocketClient(self.turing, self.printMessage, self.writeMessages)
+        self.username: str = self.settings.getSetting("username")
+        self.otherUsername: str = ""
+        self.trustManager: TrustManager = TrustManager(self.printMessage)
+        self.msgBuffer: List[Tuple[str, bool, Optional[str]]] = []
+        self.translate: Translate = Translate(self.printMessage, self.settings.getSetting("language"))
         setObject(self.translate)
 
-    def printMessage(self, text, message=False, username=None):
+    def printMessage(self, text: str, message: bool = False, username: str = None):
         if message and not self.trustManager.connexionTrusted():
             self.msgBuffer.append((text, message, username))
         else:
@@ -35,7 +35,7 @@ class Interface():
                     self.uiPrintMessage(element[0], element[1], element[2])
                 self.msgBuffer = []
 
-    def writeMessages(self, connexion, fingerprint=None):
+    def writeMessages(self, connexion: Optional[ConnexionThread], fingerprint: str=None):
         self.connexion = connexion
         if fingerprint:
             self.trustManager.setCurrentFingerprint(fingerprint)
@@ -53,21 +53,21 @@ class Interface():
             self.server.join()
             self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
 
-    def startClient(self, addr="127.0.0.1"):
+    def startClient(self, addr: str="127.0.0.1"):
         self.client.connect(addr)
 
     def stopClient(self):
         if self.client.connected():
             self.client.close()
 
-    def setUsername(self, username):
+    def setUsername(self, username: str):
         self.username = username
         self.settings.setSetting("username", username)
         if self.connexion:
             self.connexion.send(self.turing.createMessage("username", username))
         self.printMessage(self.translate.tr("username.changed") + username)
 
-    def parseCommand(self, command):
+    def parseCommand(self, command: str):
         regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
         if(regex):
             command = regex.group(1)
