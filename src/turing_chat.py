@@ -1,23 +1,23 @@
-from client import SocketClient
-from server import SocketServer
-from backend import TuringChat
-from trust import TrustManager
+from client import Client
+from server import Server
+from backend import Backend
+from trust_manager import TrustManager
 from translate import Translate, setObject
 from settings import Settings
 import re
 
 
-class Interface():
+class TuringChat():
     def __init__(self, uiPrintMessage, sendQuit=None):
         self.settings = Settings(self.printMessage)
-        self.turing = TuringChat()
+        self.turing = Backend()
         self.client = None
         self.server = None
         self.uiPrintMessage = uiPrintMessage
         self.sendQuit = sendQuit
         self.connexion = None
-        self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
-        self.client = SocketClient(self.turing, self.printMessage, self.writeMessages)
+        self.server = Server(self.turing, self.printMessage, self.writeMessages)
+        self.client = Client(self.turing, self.printMessage, self.writeMessages)
         self.username = self.settings.getSetting("username")
         self.otherUsername = None
         self.trustManager = TrustManager(self.printMessage)
@@ -51,7 +51,7 @@ class Interface():
             if not self.server.isStopped():
                 self.server.stop()
             self.server.join()
-            self.server = SocketServer(self.turing, self.printMessage, self.writeMessages)
+            self.server = Server(self.turing, self.printMessage, self.writeMessages)
 
     def startClient(self, addr="127.0.0.1"):
         self.client.connect(addr)

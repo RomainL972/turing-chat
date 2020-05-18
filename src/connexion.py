@@ -3,7 +3,7 @@ from threading import Thread
 from translate import tr
 
 
-class ConnexionThread(Thread):
+class Connexion(Thread):
     def __init__(self, socket, addr, turing, printMessage, rdyWrite):
         """ Initialize the Thread with a client socket and address """
         Thread.__init__(self)

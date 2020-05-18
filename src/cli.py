@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from api import Interface
+from turing_chat import TuringChat
 from translate import tr
 
 CURSOR_UP_ONE = '\x1b[1A'
@@ -23,7 +23,7 @@ def printMessage(text, message=False, username=None):
         print("\r" + ERASE_LINE + text + "\n" + tr("command.label") + " : ", end="")
 
 
-interface = Interface(printMessage)
+interface = TuringChat(printMessage)
 
 while True:
     try:

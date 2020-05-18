@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from tkinter import *
-import api
+import turing_chat as api
 from threading import Thread
 from translate import tr
 
@@ -17,7 +17,7 @@ def quit():
 
 
 def disc():
-    global interface, writeMsgFunc, msg_list
+    global interface, msg_list
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
@@ -27,9 +27,6 @@ def disc():
     msg_list.pack()
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chp.pack(side=BOTTOM, pady=10)
-
-    #interface = api.Interface(writeMsg, quit)
-    writeMsgFunc = writeMsg
 
     def send(e):
         Thread(target=interface.parseCommand, args=[msg.get()]).start()
@@ -54,7 +51,7 @@ def writeMsg(msg, message=False, username=None):
     msg_list.see(END)
     msg_list.config(state=DISABLED)
 
-interface = api.Interface(writeMsg, quit)
+interface = api.TuringChat(writeMsg, quit)
 
 # creer une fenetre
 wd.title(tr("app.title"))

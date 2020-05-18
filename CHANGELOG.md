@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Can connect to last host with settings
 
+### Changed
+- Changed many class and file names so they match each other
+- Separate Backend and RSAKey classes in different files
+
 ### Fixed
 - Now support multiple messages in one packet
 - Don't try to stop server when already stopped

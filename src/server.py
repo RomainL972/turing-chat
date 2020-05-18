@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import socket
-from connexion import ConnexionThread
+from connexion import Connexion
 from translate import tr
 from threading import Thread
 
 
-class SocketServer(Thread):
+class Server(Thread):
     def __init__(self, turing, printMessage, rdyWrite, host='0.0.0.0', port=1234):
         """ Initialize the server with a host and port to listen to.
         Provide a list of functions that will be used when receiving specific
@@ -76,12 +76,12 @@ class SocketServer(Thread):
                 self.upnp.deleteportmapping(self.port, 'TCP')
             except Exception:
                 self.printMessage(tr("upnp.error.remove"))
-                
+
         self.stopped = True
 
     def run(self):
         """ Accept an incoming connection.
-        Start a new SocketServerThread that will handle the communication. """
+        Start a new Server thread that will handle the communication. """
         if not self.__stop:
             self.printMessage(tr("server.starting").format(self.host, self.port))
 
@@ -95,7 +95,7 @@ class SocketServer(Thread):
                 client_sock = None
 
             if client_sock:
-                client_thr = ConnexionThread(client_sock, client_addr,
+                client_thr = Connexion(client_sock, client_addr,
                                              self.turing, self.printMessage,
                                              self.rdyWrite)
                 self.sock_threads.append(client_thr)

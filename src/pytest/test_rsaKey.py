@@ -3,7 +3,7 @@ import sys
 import os
 from gmpy2 import mpz
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import backend
+import rsa_key as backend
 
 
 @pytest.fixture
