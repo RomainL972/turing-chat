@@ -4,17 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.2.0] - 2020-05-28
 ### Added
 - Can connect to last host with settings
+- Beginning file encryption support
 
 ### Changed
 - Changed many class and file names so they match each other
 - Separate Backend and RSAKey classes in different files
+- Connexion sleeps 1 second in main loop to reduce CPU use
 
 ### Fixed
 - Now support multiple messages in one packet
 - Don't try to stop server when already stopped
+- TuringChat now handles username changes instead of CLI/GUI
+- More client connect exception handled
+- GUI screen getting empty when full fixed
 
 ## [2.1.0] - 2020-05-03
 ### Added
@@ -243,6 +248,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic server and client
 - Use regex to parse commands
 
+[2.2.0]: https://github.com/RomainL972/isn/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/RomainL972/isn/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/RomainL972/isn/compare/v1.1.1...v2.0.0
 [1.1.1]: https://github.com/RomainL972/isn/compare/v1.1.0...v1.1.1
