@@ -15,7 +15,7 @@ class Backend():
             self.key.toFile("privkey.json")
 
     def parseMessage(self, message):
-        regex = re.search("^([a-z]) ([a-zA-Z0-9+/=]*)$", message)
+        regex = re.search("^([a-z]) ([a-zA-Z0-9+/=_-]*)$", message)
         if(regex):
             command = regex.group(1)
             arg = regex.group(2)
@@ -26,6 +26,11 @@ class Backend():
                 return "message", self.key.decrypt(arg)
             elif command == "u":
                 return "username", arg
+            elif command == "k":
+                self.setFernetKey(arg)
+                return "fernet_key",
+            elif command == "f":
+                return "file", self.fernetDecrypt(arg)
             else:
                 raise ValueError(tr("error.incorrect.command") + " : " + command)
         else:

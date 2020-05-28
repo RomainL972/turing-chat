@@ -80,3 +80,8 @@ trust:
         whitelist: "Confiance enregistrée"
 language:
     set: Langue mise à Français
+fernet:
+    key:
+        received: Clé de chiffrement de fichiers reçue
+file:
+    received: Fichier reçu. Faites /file download pour le télécharger dans le dossier actuel

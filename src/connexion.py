@@ -57,6 +57,10 @@ class Connexion(Thread):
                                         self.printMessage(result[1], True)
                                     elif(result[0] == "username"):
                                         self.printMessage("", username=result[1])
+                                    elif(result[0] == "fernet_key"):
+                                        self.printMessage(tr("fernet.key.received"))
+                                    elif(result[0] == "file"):
+                                        self.printMessage(tr("file.received"))
                                 except ValueError:
                                     self.printMessage(tr("error.message.unknown"))
                             self.message = ""

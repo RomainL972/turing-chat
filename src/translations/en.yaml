@@ -80,3 +80,8 @@ trust:
         whitelist: "Trust saved"
 language:
     set: Language set to English
+fernet:
+    key:
+        received: File encrytion key received
+file:
+    received: You have received a file. Enter /file download to save it to current directory
