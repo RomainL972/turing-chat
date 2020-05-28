@@ -44,8 +44,8 @@ def writeMsg(msg, message=False, username=None):
         if(not username):
             username = tr("user.other")
         msg_list.insert(END, username + " : ")
-    msg_list.insert(END, msg + "\n")
     msg_list.see(END)
+    msg_list.insert(END, msg + "\n")
     msg_list.config(state=DISABLED)
 
 interface = api.TuringChat(writeMsg, quit)
