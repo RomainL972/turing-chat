@@ -4,7 +4,8 @@ from backend import Backend
 from trust_manager import TrustManager
 from translate import Translate, setObject
 from settings import Settings
-import re
+import parsing
+import pyparsing
 
 
 class TuringChat():
@@ -46,6 +47,7 @@ class TuringChat():
             self.connexion.send(self.turing.createMessage("username", self.username))
 
     def startServer(self):
+        self.stopConnexions()
         self.server.listen()
         self.server.start()
 
@@ -57,11 +59,16 @@ class TuringChat():
             self.server = Server(self.turing, self.printMessage, self.writeMessages)
 
     def startClient(self, addr="127.0.0.1"):
+        self.stopConnexions()
         self.client.connect(addr)
 
     def stopClient(self):
         if self.client.connected():
             self.client.close()
+
+    def stopConnexions(self):
+        self.stopClient()
+        self.stopServer()
 
     def setUsername(self, username):
         self.username = username
@@ -70,51 +77,48 @@ class TuringChat():
             self.connexion.send(self.turing.createMessage("username", username))
         self.printMessage(self.translate.tr("username.changed") + username)
 
-    def parseCommand(self, command):
-        regex = re.search("^/([a-z]*)( ([a-zA-Z0-9\\.]*))?$", command)
-        if(regex):
-            command = regex.group(1)
-            arg = regex.group(3)
+    def connect(self, host):
+        if not host:
+            host = "127.0.0.1"
+        elif host == "last":
+            host = self.settings.getSetting("lastHost")
+        self.settings.setSetting("lastHost", host)
+        self.startClient(host)
 
-            if(command == "quit"):
-                self.stopClient()
-                self.stopServer()
-                if self.sendQuit:
-                    self.sendQuit()
+    def sendMessage(self, message):
+        if not self.connexion:
+            self.printMessage(self.translate.tr("error.not.connected"))
+            return
+        if not self.trustManager.connexionTrusted():
+            self.printMessage(self.translate.tr("error.connexion.not.trusted"))
+            return
+        self.printMessage(self.translate.tr("user.you") + message)
+        self.connexion.send(self.turing.createMessage("message", message))
+
+    def quit(self):
+        self.stopClient()
+        self.stopServer()
+        if self.sendQuit:
+            self.sendQuit()
+        return "quit"
+
+    def setLanguage(self, language):
+        self.translate.setLanguage(language)
+        self.settings.setSetting("language", language)
+        self.printMessage(self.translate.tr("language.set"))
+
+    def parseCommand(self, command):
+        parsing.listen.setParseAction(self.startServer)
+        parsing.connect.setParseAction(lambda arg: self.connect(arg[1]))
+        parsing.quit.setParseAction(self.quit)
+        parsing.help.setParseAction(lambda: self.printMessage(self.translate.tr("command.help.text")))
+        parsing.nick.setParseAction(lambda arg: self.setUsername(arg[1]))
+        parsing.trust.setParseAction(lambda arg: self.trustManager.setTrust(arg[1]))
+        parsing.fingerprint.setParseAction(lambda: self.printMessage(self.turing.getMyFingerprint()))
+        parsing.language.setParseAction(lambda arg: self.setLanguage(arg[1]))
+        try:
+            result = parsing.commands.parseString(command, True)
+            if result[1] == "quit":
                 return "quit"
-            elif(command == "connect" or command == "listen"):
-                self.stopClient()
-                self.stopServer()
-                if(command == "connect"):
-                    if not arg:
-                        arg = "127.0.0.1"
-                    elif arg == "last":
-                        arg = self.settings.getSetting("lastHost")
-                    self.settings.setSetting("lastHost", arg)
-                    self.startClient(arg)
-                else:
-                    self.startServer()
-            elif(command == "nick" and arg):
-                self.setUsername(arg)
-            elif(command == "trust" and arg):
-                self.trustManager.setTrust(arg)
-            elif(command == "fingerprint"):
-                self.printMessage(self.turing.getMyFingerprint())
-            elif(command == "language" and (arg == "en" or arg == "fr")):
-                self.translate.setLanguage(arg)
-                self.settings.setSetting("language", arg)
-                self.printMessage(self.translate.tr("language.set"))
-            elif(command == "help"):
-                helpText = self.translate.tr("command.help.text")
-                self.printMessage(helpText)
-            else:
-                self.printMessage(self.translate.tr("error.incorrect.command"))
-        else:
-            if not self.connexion:
-                self.printMessage(self.translate.tr("error.not.connected"))
-                return
-            if not self.trustManager.connexionTrusted():
-                self.printMessage(self.translate.tr("error.connexion.not.trusted"))
-                return
-            self.printMessage(self.translate.tr("user.you") + command)
-            self.connexion.send(self.turing.createMessage("message", command))
+        except pyparsing.ParseException:
+            self.sendMessage(command)
