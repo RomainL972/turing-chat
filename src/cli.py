@@ -11,9 +11,6 @@ interface = None
 
 def printMessage(text, message=False, username=None):
     global interface
-    if username:
-        interface.otherUsername = username
-        return printMessage(tr("username.other.changed") + username)
     if message:
         username = interface.otherUsername
         if(not username):

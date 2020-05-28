@@ -35,9 +35,6 @@ def disc():
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
 
 def writeMsg(msg, message=False, username=None):
-    if username:
-        interface.otherUsername = username
-        return writeMsg(tr("username.other.changed") + username)
     global stop
     if stop:
         return

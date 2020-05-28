@@ -26,6 +26,9 @@ class TuringChat():
         setObject(self.translate)
 
     def printMessage(self, text, message=False, username=None):
+        if username:
+            self.otherUsername = username
+            return self.printMessage(self.translate.tr("username.other.changed") + username)
         if message and not self.trustManager.connexionTrusted():
             self.msgBuffer.append((text, message, username))
         else:
