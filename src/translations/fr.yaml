@@ -31,6 +31,7 @@ error:
             connected: "Pas de connexion, ConnexionThread ne peut pas recevoir de données"
     server:
         listening: "Le serveur n'a pas pu démarrer"
+    system: Erreur système
 connected:
     to: "Connecté à "
 socket:

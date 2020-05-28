@@ -24,6 +24,11 @@ class Client():
         except ConnectionRefusedError:
             self.printMessage(tr("error.connexion.refused"))
             return
+        except socket.timeout:
+            self.printMessage(tr("error.connexion.refused"))
+            return
+        except OSError:
+            self.print(tr("error.system"))
         self.printMessage(tr("connected.to") + str(self.sock.getpeername()))
 
         client_thr = Connexion(self.sock, self.sock.getpeername(),

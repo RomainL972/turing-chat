@@ -31,6 +31,7 @@ error:
             connected: "No connexion, ConnexionThread can not receive data"
     server:
         listening: "The server couldn't start"
+    system: System error
 connected:
     to: "Connected to"
 socket:
