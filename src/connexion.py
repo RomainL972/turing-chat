@@ -1,6 +1,7 @@
 import select
 from threading import Thread
 from translate import tr
+import time
 
 
 class Connexion(Thread):
@@ -67,6 +68,7 @@ class Connexion(Thread):
             else:
                 self.printMessage(tr("error.connexionthread.not.connected"))
                 self.stop()
+            time.sleep(0.1)
         self.close()
 
     def stop(self):
