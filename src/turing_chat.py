@@ -81,10 +81,8 @@ class TuringChat():
             self.connexion.send(self.turing.createMessage("username", username))
         self.printMessage(self.translate.tr("username.changed") + username)
 
-    def connect(self, host):
-        if not host:
-            host = "127.0.0.1"
-        elif host == "last":
+    def connect(self, host="127.0.0.1"):
+        if host == "last":
             host = self.settings.getSetting("lastHost")
         self.settings.setSetting("lastHost", host)
         self.startClient(host)
