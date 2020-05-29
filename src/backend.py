@@ -2,6 +2,7 @@ import os
 import re
 from rsa_key import RSAKey
 from translate import tr
+from cryptography.fernet import Fernet
 
 
 class Backend():
@@ -13,6 +14,7 @@ class Backend():
         else:
             self.key.generate()
             self.key.toFile("privkey.json")
+        self.fernetKey = None
 
     def parseMessage(self, message):
         regex = re.search("^([a-z]) ([a-zA-Z0-9+/=_-]*)$", message)
@@ -30,7 +32,7 @@ class Backend():
                 self.setFernetKey(arg)
                 return "fernet_key",
             elif command == "f":
-                return "file", self.fernetDecrypt(arg)
+                return "file", Fernet(self.fernetKey).decrypt(arg.encode())
             else:
                 raise ValueError(tr("error.incorrect.command") + " : " + command)
         else:
@@ -47,8 +49,22 @@ class Backend():
             if (not message):
                 return b""
             return b"u " + message.encode() + b"\n"
+        elif type == "file":
+            if (not message):
+                return b""
+            packet = b""
+            if not self.fernetKey:
+                self.generateFernetKey()
+                packet += b"k " + self.fernetKey + b"\n"
+            return packet + b"f " + Fernet(self.fernetKey).encrypt(message) + b"\n"
         else:
             return b""
 
     def getMyFingerprint(self):
         return self.key.getFingerprint()
+
+    def setFernetKey(self, key):
+        self.fernetKey = key
+
+    def generateFernetKey(self):
+        self.fernetKey = Fernet.generate_key()

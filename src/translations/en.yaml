@@ -32,6 +32,8 @@ error:
     server:
         listening: "The server couldn't start"
     system: System error
+    file:
+        notfound: File not found
 connected:
     to: "Connected to"
 socket:

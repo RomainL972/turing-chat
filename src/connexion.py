@@ -14,6 +14,7 @@ class Connexion(Thread):
         self.message = ""
         self.printMessage = printMessage
         self.rdyWriteFunc = rdyWrite
+        self.turingChat = None
 
     def send(self, text):
         if self.socket and not self.__stop:
@@ -62,14 +63,18 @@ class Connexion(Thread):
                                         self.printMessage(tr("fernet.key.received"))
                                     elif(result[0] == "file"):
                                         self.printMessage(tr("file.received"))
+                                        self.turingChat.addFile(result[1])
                                 except ValueError:
                                     self.printMessage(tr("error.message.unknown"))
                             self.message = ""
             else:
                 self.printMessage(tr("error.connexionthread.not.connected"))
                 self.stop()
-            time.sleep(0.1)
+            #time.sleep(0.01)
         self.close()
+
+    def setTuringChat(self, turingChat):
+        self.turingChat = turingChat
 
     def stop(self):
         self.__stop = True

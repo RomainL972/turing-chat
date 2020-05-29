@@ -32,6 +32,8 @@ error:
     server:
         listening: "Le serveur n'a pas pu démarrer"
     system: Erreur système
+    file:
+        notfound: Fichier introuvable
 connected:
     to: "Connecté à "
 socket:

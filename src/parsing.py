@@ -12,7 +12,7 @@ nick = "nick" + Word(alphanums,max=15)
 trust = "trust" + oneOf("0 1 2")
 fingerprint = Literal("fingerprint")
 language = "language" + oneOf("en fr")
+file = "file" + (("download" + Word(nums)) ^ ("upload" + Word(alphanums+"-_./")))
 
 
-
-commands = "/" + (listen ^ connect ^ quit ^ help ^ nick ^ trust ^ fingerprint ^ language)
+commands = "/" + (listen ^ connect ^ quit ^ help ^ nick ^ trust ^ fingerprint ^ language ^ file)

@@ -6,6 +6,7 @@ from translate import Translate, setObject
 from settings import Settings
 import parsing
 import pyparsing
+import os
 
 
 class TuringChat():
@@ -23,6 +24,7 @@ class TuringChat():
         self.otherUsername = None
         self.trustManager = TrustManager(self.printMessage)
         self.msgBuffer = []
+        self.fileList = []
         self.translate = Translate(self.printMessage, self.settings.getSetting("language"))
         setObject(self.translate)
 
@@ -41,6 +43,8 @@ class TuringChat():
 
     def writeMessages(self, connexion, fingerprint=None):
         self.connexion = connexion
+        if self.connexion:
+            self.connexion.setTuringChat(self)
         if fingerprint:
             self.trustManager.setCurrentFingerprint(fingerprint)
         if self.username and self.connexion:
@@ -116,9 +120,30 @@ class TuringChat():
         parsing.trust.setParseAction(lambda arg: self.trustManager.setTrust(arg[1]))
         parsing.fingerprint.setParseAction(lambda: self.printMessage(self.turing.getMyFingerprint()))
         parsing.language.setParseAction(lambda arg: self.setLanguage(arg[1]))
+        parsing.file.setParseAction(lambda arg: self.saveFile(arg[2]) if arg[1] == "download" else arg[1] == "upload" and self.sendFile(arg[2]))
         try:
             result = parsing.commands.parseString(command, True)
             if result[1] == "quit":
                 return "quit"
         except pyparsing.ParseException:
             self.sendMessage(command)
+
+    def addFile(self, file):
+        self.fileList.append(file)
+
+    def saveFile(self, fileId):
+        fileId = int(fileId)
+        if fileId < len(self.fileList):
+            fileContent = self.fileList[fileId]
+            with open("file-" + str(fileId), "wb") as f:
+                f.write(fileContent)
+        else:
+            self.printMessage(self.translate.tr("error.file.notfound"))
+
+    def sendFile(self, filename):
+        if os.path.isfile(filename):
+            with open(filename, "rb") as f:
+                data = f.read()
+            self.connexion.send(self.turing.createMessage("file", data))
+        else:
+            self.printMessage(self.translate.tr("error.file.notfound"))
