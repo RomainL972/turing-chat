@@ -11,6 +11,8 @@ command:
             - /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)
             - /fingerprint: Affiche la fingerprint de ma clé
             - /language <fr/en>: Choisir la langue
+            - /file upload <chemin/vers/fichier>: Envoie un ficher
+            - /file download <id>: Télécharge le fichier <id>
             - message : Envoie un message
 error:
     incorrect:
@@ -88,3 +90,5 @@ fernet:
         received: Clé de chiffrement de fichiers reçue
 file:
     received: Fichier reçu. Faites /file download pour le télécharger dans le dossier actuel
+    saved: Le fichier a été sauvegardé
+    sent: Le fichier a été envoyé

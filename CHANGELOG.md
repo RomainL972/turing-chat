@@ -7,12 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - File uploading and saving
+- Log messages for file uploading and saving
+- Translations for file uploading and saving
 
 ### Changed
 - Better command parsing using pyparsing
 
 ### Fixed
 - The program no longer use 100% of one CPU thanks to select in connexion
+- File encryption key is now RSA encrypted
 
 ## [2.2.0] - 2020-05-28
 ### Added

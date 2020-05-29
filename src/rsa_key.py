@@ -63,7 +63,7 @@ class RSAKey():
     def encrypt(self, text):
         if(self.isEmpty()):
             return None
-        hexa = binascii.hexlify(text.encode())
+        hexa = binascii.hexlify(text)
         result = rsa.encrypt(hexa, self.key["e"], self.key["n"]).encode()
         return result
 
@@ -71,7 +71,7 @@ class RSAKey():
         if(not self.isPrivate()):
             return None
         result = rsa.decrypt(cypher, self.key["d"], self.key["n"])
-        return binascii.unhexlify(result).decode()
+        return binascii.unhexlify(result)
 
     def getFingerprint(self):
         if self.isEmpty():

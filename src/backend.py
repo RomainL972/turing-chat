@@ -25,11 +25,11 @@ class Backend():
                 self.otherKey.fromBase64(arg)
                 return "pubkey", self.otherKey.getFingerprint()
             elif command == "m":
-                return "message", self.key.decrypt(arg)
+                return "message", self.key.decrypt(arg).decode()
             elif command == "u":
                 return "username", arg
             elif command == "k":
-                self.setFernetKey(arg)
+                self.setFernetKey(self.key.decrypt(arg))
                 return "fernet_key",
             elif command == "f":
                 return "file", Fernet(self.fernetKey).decrypt(arg.encode())
@@ -44,7 +44,7 @@ class Backend():
         elif type == "message":
             if(not message):
                 return b""
-            return b"m " + self.otherKey.encrypt(message) + b"\n"
+            return b"m " + self.otherKey.encrypt(message.encode()) + b"\n"
         elif type == "username":
             if (not message):
                 return b""
@@ -55,7 +55,7 @@ class Backend():
             packet = b""
             if not self.fernetKey:
                 self.generateFernetKey()
-                packet += b"k " + self.fernetKey + b"\n"
+                packet += b"k " + self.otherKey.encrypt(self.fernetKey) + b"\n"
             return packet + b"f " + Fernet(self.fernetKey).encrypt(message) + b"\n"
         else:
             return b""

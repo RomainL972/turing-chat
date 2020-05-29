@@ -137,6 +137,7 @@ class TuringChat():
             fileContent = self.fileList[fileId]
             with open("file-" + str(fileId), "wb") as f:
                 f.write(fileContent)
+            self.printMessage(self.translate.tr("file.saved"))
         else:
             self.printMessage(self.translate.tr("error.file.notfound"))
 
@@ -145,5 +146,6 @@ class TuringChat():
             with open(filename, "rb") as f:
                 data = f.read()
             self.connexion.send(self.turing.createMessage("file", data))
+            self.printMessage(self.translate.tr("file.sent"))
         else:
             self.printMessage(self.translate.tr("error.file.notfound"))

@@ -11,6 +11,8 @@ command:
             - /trust <level>: Choose trust level (0: never, 1: once, 2: always)
             - /fingerprint: Show the fingerprint of my public key
             - /language <en/fr>: Set the language
+            - /file upload <filename>: Upload a file
+            - /file download <id>: Download file id
             - message : Send a message
 error:
     incorrect:
@@ -88,3 +90,5 @@ fernet:
         received: File encrytion key received
 file:
     received: You have received a file. Enter /file download to save it to current directory
+    saved: The file was saved successfully
+    sent: The file is uploaded
