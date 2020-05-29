@@ -1,6 +1,7 @@
 import os
 import yaml
 
+
 class Settings():
     def __init__(self, printMessage):
         self.settingsFile = "settings.yaml"

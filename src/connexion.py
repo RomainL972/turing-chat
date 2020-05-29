@@ -1,7 +1,6 @@
 import select
 from threading import Thread
 from translate import tr
-import time
 
 
 class Connexion(Thread):

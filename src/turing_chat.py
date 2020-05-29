@@ -37,9 +37,9 @@ class TuringChat():
         else:
             self.uiPrintMessage(text, message, username)
         if self.trustManager.connexionTrusted():
-                for element in self.msgBuffer:
-                    self.uiPrintMessage(element[0], element[1], element[2])
-                self.msgBuffer = []
+            for element in self.msgBuffer:
+                self.uiPrintMessage(element[0], element[1], element[2])
+            self.msgBuffer = []
 
     def writeMessages(self, connexion, fingerprint=None):
         self.connexion = connexion

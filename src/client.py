@@ -32,7 +32,7 @@ class Client():
         self.printMessage(tr("connected.to") + str(self.sock.getpeername()))
 
         client_thr = Connexion(self.sock, self.sock.getpeername(),
-                                     self.turing, self.printMessage, self.rdyWrite)
+                               self.turing, self.printMessage, self.rdyWrite)
         self.sock_thread = client_thr
         client_thr.start()
 

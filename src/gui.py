@@ -34,6 +34,7 @@ def disc():
 
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
 
+
 def writeMsg(msg, message=False, username=None):
     global stop
     if stop:
@@ -47,6 +48,7 @@ def writeMsg(msg, message=False, username=None):
     msg_list.see(END)
     msg_list.insert(END, msg + "\n")
     msg_list.config(state=DISABLED)
+
 
 interface = api.TuringChat(writeMsg, quit)
 

@@ -96,8 +96,8 @@ class Server(Thread):
 
             if client_sock:
                 client_thr = Connexion(client_sock, client_addr,
-                                             self.turing, self.printMessage,
-                                             self.rdyWrite)
+                                       self.turing, self.printMessage,
+                                       self.rdyWrite)
                 self.sock_threads.append(client_thr)
                 client_thr.start()
         self.close()
