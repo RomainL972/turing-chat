@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - File uploading and saving
 - Log messages for file uploading and saving
 - Translations for file uploading and saving
+- File encryption tests
 
 ### Changed
 - Better command parsing using pyparsing
