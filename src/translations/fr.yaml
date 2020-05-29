@@ -94,3 +94,6 @@ file:
     received: Fichier reçu. Faites /file download pour le télécharger dans le dossier actuel
     saved: Le fichier a été sauvegardé
     sent: Le fichier a été envoyé
+gui:
+    message:
+        placeholder: Entrez vos messages ici...

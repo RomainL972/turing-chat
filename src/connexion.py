@@ -25,8 +25,8 @@ class Connexion(Thread):
 
     def run(self):
         self.printMessage(tr("connexion.thread.start").format(self.addr))
-        self.socket.send(self.turing.createMessage("pubkey"))
         self.__stop = False
+        self.send(self.turing.createMessage("pubkey"))
         while not self.__stop:
             if self.socket:
                 try:

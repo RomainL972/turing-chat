@@ -94,3 +94,6 @@ file:
     received: You have received a file. Enter /file download to save it to current directory
     saved: The file was saved successfully
     sent: The file is uploaded
+gui:
+    message:
+        placeholder: Type your messages here...
