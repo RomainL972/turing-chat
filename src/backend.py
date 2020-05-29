@@ -32,6 +32,8 @@ class Backend():
                 self.setFernetKey(self.key.decrypt(arg))
                 return "fernet_key",
             elif command == "f":
+                if not self.fernetKey:
+                    raise ValueError(tr("error.file.without.key"))
                 return "file", Fernet(self.fernetKey).decrypt(arg.encode())
             else:
                 raise ValueError(tr("error.incorrect.command") + " : " + command)

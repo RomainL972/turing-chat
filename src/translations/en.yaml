@@ -36,6 +36,8 @@ error:
     system: System error
     file:
         notfound: File not found
+        without:
+            key: File received without decryption key
 connected:
     to: "Connected to"
 socket:

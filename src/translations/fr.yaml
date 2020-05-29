@@ -36,6 +36,8 @@ error:
     system: Erreur système
     file:
         notfound: Fichier introuvable
+        without:
+            key: Fichier reçu sans clé de déchiffrement
 connected:
     to: "Connecté à "
 socket:

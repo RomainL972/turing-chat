@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - The program no longer use 100% of one CPU thanks to select in connexion
 - File encryption key is now RSA encrypted
+- Add cryptography to requirements.txt
+- Handle error when file received without key
 
 ## [2.2.0] - 2020-05-28
 ### Added
