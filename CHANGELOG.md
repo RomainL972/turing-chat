@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Better command parsing using pyparsing
 
+### Fixed
+- The program no longer use 100% of one CPU thanks to select in connexion
+
 ## [2.2.0] - 2020-05-28
 ### Added
 - Can connect to last host with settings

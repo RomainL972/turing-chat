@@ -19,7 +19,7 @@ class Connexion(Thread):
     def send(self, text):
         if self.socket and not self.__stop:
             rdy_read, rdy_write, sock_err = select.select(
-                [self.socket], [self.socket], [], 5)
+                [], [self.socket], [], 1)
 
             if len(rdy_write) > 0:
                 self.socket.send(text)
@@ -32,7 +32,7 @@ class Connexion(Thread):
             if self.socket:
                 try:
                     rdy_read, rdy_write, sock_err = select.select(
-                        [self.socket], [self.socket], [], 5)
+                        [self.socket], [], [], 1)
                 except select.error:
                     self.printMessage(tr("error.select.failed").format(self.addr))
                     self.stop()
@@ -70,7 +70,6 @@ class Connexion(Thread):
             else:
                 self.printMessage(tr("error.connexionthread.not.connected"))
                 self.stop()
-            #time.sleep(0.01)
         self.close()
 
     def setTuringChat(self, turingChat):
