@@ -2,3 +2,4 @@ gmpy2==2.0.8
 miniupnpc==2.0.2
 PyYAML==5.3
 pyparsing==2.4.7
+cryptography==2.9.2
