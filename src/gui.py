@@ -27,7 +27,10 @@ def disc():
     msg_list.pack()
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chp.pack(side=BOTTOM, pady=10)
-
+    btnSERV = Button(wd, text=tr("server.start"), font=("courrier", 22), bg="white", fg="#56646A", command=interface.startServer)
+    btnSERV.pack(fill=X)
+    chpIP = Entry(wd, width=20, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
+    chpIP.pack(side=BOTTOM, pady=30)
     #interface = api.Interface(writeMsg, quit)
     writeMsgFunc = writeMsg
 
