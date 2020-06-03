@@ -80,3 +80,5 @@ trust:
         whitelist: "Confiance enregistrée"
 language:
     set: Langue mise à Français
+server:
+    start: Démarrer le serveur
