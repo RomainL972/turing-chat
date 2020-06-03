@@ -80,3 +80,5 @@ trust:
         whitelist: "Trust saved"
 language:
     set: Language set to English
+server:
+    start: Start server
