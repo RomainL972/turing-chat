@@ -58,6 +58,7 @@ connexion:
 server:
     starting: "Démarrage du server (hôte {}, port {})"
     closing: "Fermeture du serveur (hôte {}, port {})"
+    start: "Démarrer le serveur"
 status:
     connected: "Vous êtes connecté"
 app:
@@ -87,8 +88,6 @@ trust:
         whitelist: "Confiance enregistrée"
 language:
     set: Langue mise à Français
-server:
-    start: Démarrer le serveur
 fernet:
     key:
         received: Clé de chiffrement de fichiers reçue

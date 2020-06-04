@@ -58,6 +58,7 @@ connexion:
 server:
     starting: "Starting server (host {}, port {})"
     closing: "Closing server (host {}, port {})"
+    start: "Start server"
 status:
     connected: "You are connected"
 app:
@@ -87,8 +88,6 @@ trust:
         whitelist: "Trust saved"
 language:
     set: Language set to English
-server:
-    start: Start server
 fernet:
     key:
         received: File encrytion key received
