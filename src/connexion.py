@@ -3,7 +3,7 @@ from threading import Thread
 from translate import tr
 
 
-class ConnexionThread(Thread):
+class Connexion(Thread):
     def __init__(self, socket, addr, turing, printMessage, rdyWrite):
         """ Initialize the Thread with a client socket and address """
         Thread.__init__(self)
@@ -13,24 +13,25 @@ class ConnexionThread(Thread):
         self.message = ""
         self.printMessage = printMessage
         self.rdyWriteFunc = rdyWrite
+        self.turingChat = None
 
     def send(self, text):
         if self.socket and not self.__stop:
             rdy_read, rdy_write, sock_err = select.select(
-                [self.socket], [self.socket], [], 5)
+                [], [self.socket], [], 1)
 
             if len(rdy_write) > 0:
                 self.socket.send(text)
 
     def run(self):
         self.printMessage(tr("connexion.thread.start").format(self.addr))
-        self.socket.send(self.turing.createMessage("pubkey"))
         self.__stop = False
+        self.send(self.turing.createMessage("pubkey"))
         while not self.__stop:
             if self.socket:
                 try:
                     rdy_read, rdy_write, sock_err = select.select(
-                        [self.socket], [self.socket], [], 5)
+                        [self.socket], [], [], 1)
                 except select.error:
                     self.printMessage(tr("error.select.failed").format(self.addr))
                     self.stop()
@@ -57,6 +58,11 @@ class ConnexionThread(Thread):
                                         self.printMessage(result[1], True)
                                     elif(result[0] == "username"):
                                         self.printMessage("", username=result[1])
+                                    elif(result[0] == "fernet_key"):
+                                        self.printMessage(tr("fernet.key.received"))
+                                    elif(result[0] == "file"):
+                                        self.printMessage(tr("file.received"))
+                                        self.turingChat.addFile(result[1])
                                 except ValueError:
                                     self.printMessage(tr("error.message.unknown"))
                             self.message = ""
@@ -64,6 +70,9 @@ class ConnexionThread(Thread):
                 self.printMessage(tr("error.connexionthread.not.connected"))
                 self.stop()
         self.close()
+
+    def setTuringChat(self, turingChat):
+        self.turingChat = turingChat
 
     def stop(self):
         self.__stop = True

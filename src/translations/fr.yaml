@@ -11,6 +11,8 @@ command:
             - /trust <niveau>: Choisis le niveau de confiance (0: jamais, 1: une fois, 2: toujours)
             - /fingerprint: Affiche la fingerprint de ma clé
             - /language <fr/en>: Choisir la langue
+            - /file upload <chemin/vers/fichier>: Envoie un ficher
+            - /file download <id>: Télécharge le fichier <id>
             - message : Envoie un message
 error:
     incorrect:
@@ -31,6 +33,11 @@ error:
             connected: "Pas de connexion, ConnexionThread ne peut pas recevoir de données"
     server:
         listening: "Le serveur n'a pas pu démarrer"
+    system: Erreur système
+    file:
+        notfound: Fichier introuvable
+        without:
+            key: Fichier reçu sans clé de déchiffrement
 connected:
     to: "Connecté à "
 socket:
@@ -82,3 +89,13 @@ language:
     set: Langue mise à Français
 server:
     start: Démarrer le serveur
+fernet:
+    key:
+        received: Clé de chiffrement de fichiers reçue
+file:
+    received: Fichier reçu. Faites /file download pour le télécharger dans le dossier actuel
+    saved: Le fichier a été sauvegardé
+    sent: Le fichier a été envoyé
+gui:
+    message:
+        placeholder: Entrez vos messages ici...

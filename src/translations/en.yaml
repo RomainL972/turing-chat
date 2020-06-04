@@ -11,6 +11,8 @@ command:
             - /trust <level>: Choose trust level (0: never, 1: once, 2: always)
             - /fingerprint: Show the fingerprint of my public key
             - /language <en/fr>: Set the language
+            - /file upload <filename>: Upload a file
+            - /file download <id>: Download file id
             - message : Send a message
 error:
     incorrect:
@@ -31,6 +33,11 @@ error:
             connected: "No connexion, ConnexionThread can not receive data"
     server:
         listening: "The server couldn't start"
+    system: System error
+    file:
+        notfound: File not found
+        without:
+            key: File received without decryption key
 connected:
     to: "Connected to"
 socket:
@@ -82,3 +89,13 @@ language:
     set: Language set to English
 server:
     start: Start server
+fernet:
+    key:
+        received: File encrytion key received
+file:
+    received: You have received a file. Enter /file download to save it to current directory
+    saved: The file was saved successfully
+    sent: The file is uploaded
+gui:
+    message:
+        placeholder: Type your messages here...

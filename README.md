@@ -1,3 +1,4 @@
+![Python application](https://github.com/RomainL972/isn/workflows/Python%20application/badge.svg)
 # TuringChat
 
 TuringChat est une messagerie en réseau chiffrée par le protocole RSA. Ce programme a été réalisé dans le cadre de mon projet d'ISN

@@ -3,7 +3,7 @@ import sys
 import os
 from gmpy2 import mpz
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import backend
+import rsa_key as backend
 
 
 @pytest.fixture
@@ -23,17 +23,17 @@ def empty_rsa_key():
 
 
 def test_encrypt(rsa_key):
-    assert rsa_key.encrypt("salut") == b"98d93969a1426d713fdae794f036bfe1"
+    assert rsa_key.encrypt(b"salut") == b"98d93969a1426d713fdae794f036bfe1"
 
 
 def test_decrypt(rsa_key):
-    assert rsa_key.decrypt(b'1274da0d802d1f9c502caed2b49020c6') == "test456"
+    assert rsa_key.decrypt(b'1274da0d802d1f9c502caed2b49020c6') == b"test456"
 
 
 def test_generate():
     key = backend.RSAKey()
     key.generate(256)
-    assert key.decrypt(key.encrypt("this is a test")) == "this is a test"
+    assert key.decrypt(key.encrypt(b"this is a test")) == b"this is a test"
 
 
 def test_toJson(rsa_key):
@@ -66,6 +66,7 @@ def test_fromBase64(rsa_key, empty_rsa_key):
     empty_rsa_key.fromBase64("eyJuIjogImQ3MWM2NjAxM2VhZWU0ODUyZmU3Nzk3ZTRlMmFlZ\
 WVkIiwgImUiOiAiMTAwMDEiLCAiZCI6ICIyM2NhYTk1YzRlYWEzYTAyNzMwZjk2NWE4YTM5MDNkMSJ9")
     assert empty_rsa_key.key == rsa_key.key
+
 
 def test_getFingerprint(rsa_key, empty_rsa_key):
     assert empty_rsa_key.getFingerprint() == ''

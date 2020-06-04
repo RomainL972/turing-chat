@@ -6,11 +6,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Placeholder in GUI
+
+### Changed
+- GUI messages now in white
+
+## [2.3.0] - 2020-05-29
+### Added
+- File uploading and saving
+- Log messages for file uploading and saving
+- Translations for file uploading and saving
+- File encryption tests
+
+### Changed
+- Better command parsing using pyparsing
+
+### Fixed
+- The program no longer use 100% of one CPU thanks to select in connexion
+- File encryption key is now RSA encrypted
+- Add cryptography to requirements.txt
+- Handle error when file received without key
+
+## [2.2.0] - 2020-05-28
+### Added
 - Can connect to last host with settings
+- Beginning file encryption support
+
+### Changed
+- Changed many class and file names so they match each other
+- Separate Backend and RSAKey classes in different files
+- Connexion sleeps 1 second in main loop to reduce CPU use
 
 ### Fixed
 - Now support multiple messages in one packet
 - Don't try to stop server when already stopped
+- TuringChat now handles username changes instead of CLI/GUI
+- More client connect exception handled
+- GUI screen getting empty when full fixed
 
 ## [2.1.0] - 2020-05-03
 ### Added
@@ -239,6 +271,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic server and client
 - Use regex to parse commands
 
+[Unreleased]: https://github.com/RomainL972/isn/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/RomainL972/isn/compare/v2.2.0...v2.3.0
+[2.2.0]: https://github.com/RomainL972/isn/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/RomainL972/isn/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/RomainL972/isn/compare/v1.1.1...v2.0.0
 [1.1.1]: https://github.com/RomainL972/isn/compare/v1.1.0...v1.1.1

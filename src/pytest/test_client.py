@@ -26,7 +26,7 @@ def test_connectWithoutServer():
         if i == 0:
             assert msg == tr("error.connexion.refused")
         i += 1
-    c = client.SocketClient(backend.TuringChat(False), test_output, empty_func)
+    c = client.Client(backend.Backend(False), test_output, empty_func)
     c.connect("127.0.0.1", 1234)
     assert i == 1
     c.close()
@@ -44,7 +44,7 @@ def test_connect():
         if i == 1:
             assert(msg == tr("connexion.thread.start").format("('127.0.0.1', 1234)"))
         i += 1
-    c = client.SocketClient(backend.TuringChat(False), test_output, empty_func)
+    c = client.Client(backend.Backend(False), test_output, empty_func)
 
     # We create a simple socket server
     server = socket.socket()

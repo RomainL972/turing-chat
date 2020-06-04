@@ -1,6 +1,7 @@
 import yaml
 import os
 
+
 class Translate():
     def __init__(self, printMessage, language):
         self.printMessage = printMessage
@@ -15,7 +16,7 @@ class Translate():
         with open(os.path.join(script_dir, rel_path), 'r') as stream:
             try:
                 self.messages = yaml.safe_load(stream)
-            except yaml.YAMLError as exc:
+            except yaml.YAMLError:
                 self.printMessage("error.yaml")
 
     def getMessage(self, data, keys):
@@ -32,11 +33,14 @@ class Translate():
         self.language = language
         self.loadTranslations()
 
+
 translate = None
+
 
 def setObject(object):
     global translate
     translate = object
+
 
 def tr(message):
     if translate:

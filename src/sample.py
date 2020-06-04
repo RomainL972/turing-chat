@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 # On importe l'API de TuringChat
-from api import Interface
+from turing_chat import TuringChat
 
 
 # On définit une fonction avec ces paramètres qui affiche un message reçu
@@ -10,7 +10,7 @@ def printMessage(message, logging=False):
 
 
 # On crée l'objet de l'interface avec comme paramètre la première fonction
-interface = Interface(printMessage)
+interface = TuringChat(printMessage)
 
 while True:
     text = input("Command : ")

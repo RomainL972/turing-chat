@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
 import socket
-from connexion import ConnexionThread
+from connexion import Connexion
 from translate import tr
 
 
-class SocketClient():
+class Client():
     def __init__(self, turing, printMessage, rdyWrite):
         self.turing = turing
         self.sock = None
@@ -24,10 +24,15 @@ class SocketClient():
         except ConnectionRefusedError:
             self.printMessage(tr("error.connexion.refused"))
             return
+        except socket.timeout:
+            self.printMessage(tr("error.connexion.refused"))
+            return
+        except OSError:
+            self.print(tr("error.system"))
         self.printMessage(tr("connected.to") + str(self.sock.getpeername()))
 
-        client_thr = ConnexionThread(self.sock, self.sock.getpeername(),
-                                     self.turing, self.printMessage, self.rdyWrite)
+        client_thr = Connexion(self.sock, self.sock.getpeername(),
+                               self.turing, self.printMessage, self.rdyWrite)
         self.sock_thread = client_thr
         client_thr.start()
 

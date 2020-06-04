@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from tkinter import *
-import api
+import turing_chat as api
 from threading import Thread
 from translate import tr
 
@@ -17,22 +17,24 @@ def quit():
 
 
 def disc():
-    global interface, writeMsgFunc, msg_list
+    global interface, msg_list
     for c in wd.winfo_children():
         c.destroy()
     msg = StringVar()  # pour le message qui sera envoyé
     label = Label(wd, text=tr("status.connected"), font=("courrier", 22), bg="#56646A", fg="white")
     label.pack(side=TOP)
-    msg_list = Text(wd, bg="#545454", height=30, width=100, state=DISABLED)
-    msg_list.pack()
+    msg_list = Text(wd, bg="#545454", fg="white", state=DISABLED)
+    
+    msg_list.pack(expand=True, fill='both', padx=100)
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
-    chp.pack(side=BOTTOM, pady=10)
+    chp.insert(0, tr("gui.message.placeholder"))
+    chp.pack(side=BOTTOM, pady=10, padx=100, fill="x")
+    chp.bind("<FocusIn>", lambda args: chp.delete('0', 'end'))
+
     btnSERV = Button(wd, text=tr("server.start"), font=("courrier", 22), bg="white", fg="#56646A", command=interface.startServer)
     btnSERV.pack(fill=X)
     chpIP = Entry(wd, width=20, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chpIP.pack(side=BOTTOM, pady=30)
-    #interface = api.Interface(writeMsg, quit)
-    writeMsgFunc = writeMsg
 
     def send(e):
         Thread(target=interface.parseCommand, args=[msg.get()]).start()
@@ -40,10 +42,8 @@ def disc():
 
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
 
+
 def writeMsg(msg, message=False, username=None):
-    if username:
-        interface.otherUsername = username
-        return writeMsg(tr("username.other.changed") + username)
     global stop
     if stop:
         return
@@ -53,11 +53,12 @@ def writeMsg(msg, message=False, username=None):
         if(not username):
             username = tr("user.other")
         msg_list.insert(END, username + " : ")
-    msg_list.insert(END, msg + "\n")
     msg_list.see(END)
+    msg_list.insert(END, msg + "\n")
     msg_list.config(state=DISABLED)
 
-interface = api.Interface(writeMsg, quit)
+
+interface = api.TuringChat(writeMsg, quit)
 
 # creer une fenetre
 wd.title(tr("app.title"))
