@@ -56,7 +56,6 @@ class Server(Thread):
         except OSError:
             self.printMessage(tr("error.server.listening"))
             self.stop()
-            self.close()
 
     def close(self):
         """ Close the client socket threads and server socket
