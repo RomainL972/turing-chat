@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Placeholder in GUI
+- Start server button in GUI
 
 ### Changed
 - GUI messages now in white
+
+### Fixed
+- TIME_WAIT problem resolved using SO_REUSEADDR
 
 ## [2.3.0] - 2020-05-29
 ### Added
