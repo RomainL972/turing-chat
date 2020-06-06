@@ -47,7 +47,9 @@ def test_connect():
     c = client.Client(backend.Backend(False), test_output, empty_func)
 
     # We create a simple socket server
-    server = socket.socket()
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
     server.bind(("127.0.0.1", 1234))
     server.listen(1)
     t = threading.Thread(target=server.accept)

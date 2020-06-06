@@ -6,7 +6,7 @@ from cryptography.fernet import Fernet
 
 
 class Backend():
-    def __init__(self, getKey=True):
+    def __init__(self):
         self.key = RSAKey()
         self.otherKey = RSAKey()
         if os.path.isfile("privkey.json"):

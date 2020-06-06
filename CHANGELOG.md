@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Placeholder in GUI
 - Start server button in GUI
+- tests for turing_chat.py
 
 ### Changed
 - GUI messages now in white
