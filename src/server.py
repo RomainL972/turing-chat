@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 
 import socket
-from connexion import Connexion
 from translate import tr
 from threading import Thread
 
 
 class Server(Thread):
-    def __init__(self, turing, printMessage, rdyWrite, host='0.0.0.0', port=1234):
+    def __init__(self, io_manager, host='0.0.0.0', port=1234):
         """ Initialize the server with a host and port to listen to.
         Provide a list of functions that will be used when receiving specific
         data """
         Thread.__init__(self)
 
-        self.turing = turing
-        self.printMessage = printMessage
-        self.rdyWrite = rdyWrite
+        self.io_manager = io_manager
+        self.printMessage = io_manager.printMessage
         self.upnpEnabled = False
         self.upnpAvailable = False
         self.host = host
@@ -95,11 +93,8 @@ class Server(Thread):
                 client_sock = None
 
             if client_sock:
-                client_thr = Connexion(client_sock, client_addr,
-                                       self.turing, self.printMessage,
-                                       self.rdyWrite)
+                client_thr = self.io_manager.newConnexion(client_sock, client_addr)
                 self.sock_threads.append(client_thr)
-                client_thr.start()
         self.close()
 
     def stop(self):

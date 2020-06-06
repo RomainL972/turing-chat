@@ -1,19 +1,21 @@
 import select
 from threading import Thread
 from translate import tr
+from backend import Backend
 
 
 class Connexion(Thread):
-    def __init__(self, socket, addr, turing, printMessage, rdyWrite):
+    def __init__(self, io_manager, socket, addr):
         """ Initialize the Thread with a client socket and address """
         Thread.__init__(self)
+        self.io_manager = io_manager
+        self.printMessage = io_manager.printMessage
         self.socket = socket
         self.addr = addr
-        self.turing = turing
+        self.turing = Backend()
         self.message = ""
-        self.printMessage = printMessage
-        self.rdyWriteFunc = rdyWrite
-        self.turingChat = None
+        self.readyToSend = False
+        self.username = ""
 
     def send(self, text):
         if self.socket and not self.__stop:
@@ -53,16 +55,16 @@ class Connexion(Thread):
                                 try:
                                     result = self.turing.parseMessage(message)
                                     if(result[0] == "pubkey"):
-                                        self.rdyWriteFunc(self, result[1])
+                                        self.readyToSend = True
                                     elif(result[0] == "message"):
-                                        self.printMessage(result[1], True)
+                                        self.io_manager.newMessage(self, result[1])
                                     elif(result[0] == "username"):
-                                        self.printMessage("", username=result[1])
+                                        self.username = result[1]
                                     elif(result[0] == "fernet_key"):
                                         self.printMessage(tr("fernet.key.received"))
                                     elif(result[0] == "file"):
                                         self.printMessage(tr("file.received"))
-                                        self.turingChat.addFile(result[1])
+                                        self.io_manager.newFile(self, result[1])
                                 except ValueError:
                                     self.printMessage(tr("error.message.unknown"))
                             self.message = ""
@@ -71,12 +73,9 @@ class Connexion(Thread):
                 self.stop()
         self.close()
 
-    def setTuringChat(self, turingChat):
-        self.turingChat = turingChat
-
     def stop(self):
         self.__stop = True
-        self.rdyWriteFunc(None)
+        self.io_manager.stopConnexion(self)
 
     def close(self):
         """ Close connection with the client socket. """

@@ -7,6 +7,7 @@ from settings import Settings
 import parsing
 import pyparsing
 import os
+from io_manager import IOManager
 
 
 class TuringChat():
@@ -17,9 +18,6 @@ class TuringChat():
         self.server = None
         self.uiPrintMessage = uiPrintMessage
         self.sendQuit = sendQuit
-        self.connexion = None
-        self.server = Server(self.turing, self.printMessage, self.writeMessages)
-        self.client = Client(self.turing, self.printMessage, self.writeMessages)
         self.username = self.settings.getSetting("username")
         self.otherUsername = None
         self.trustManager = TrustManager(self.printMessage)
@@ -27,6 +25,7 @@ class TuringChat():
         self.fileList = []
         self.translate = Translate(self.printMessage, self.settings.getSetting("language"))
         setObject(self.translate)
+        self.io_manager = IOManager(self)
 
     def printMessage(self, text, message=False, username=None):
         if username:
@@ -41,51 +40,27 @@ class TuringChat():
                 self.uiPrintMessage(element[0], element[1], element[2])
             self.msgBuffer = []
 
-    def writeMessages(self, connexion, fingerprint=None):
-        self.connexion = connexion
-        if self.connexion:
-            self.connexion.setTuringChat(self)
-        if fingerprint:
-            self.trustManager.setCurrentFingerprint(fingerprint)
-        if self.username and self.connexion:
-            self.connexion.send(self.turing.createMessage("username", self.username))
+    # def writeMessages(self, connexion, fingerprint=None):
+    #     self.connexion = connexion
+    #     if self.connexion:
+    #         self.connexion.setTuringChat(self)
+    #     if fingerprint:
+    #         self.trustManager.setCurrentFingerprint(fingerprint)
+    #     if self.username and self.connexion:
+    #         self.connexion.send(self.turing.createMessage("username", self.username))
+
+    # def setUsername(self, username):
+    #     self.username = username
+    #     self.settings.setSetting("username", username)
+    #     if self.connexion:
+    #         self.connexion.send(self.turing.createMessage("username", username))
+    #     self.printMessage(self.translate.tr("username.changed") + username)
 
     def startServer(self):
-        self.stopConnexions()
-        self.server.listen()
-        self.server.start()
-
-    def stopServer(self):
-        if self.server.listening() or self.server.isStopped():
-            if not self.server.isStopped():
-                self.server.stop()
-            self.server.join()
-            self.server = Server(self.turing, self.printMessage, self.writeMessages)
-
-    def startClient(self, addr="127.0.0.1"):
-        self.stopConnexions()
-        self.client.connect(addr)
-
-    def stopClient(self):
-        if self.client.connected():
-            self.client.close()
-
-    def stopConnexions(self):
-        self.stopClient()
-        self.stopServer()
-
-    def setUsername(self, username):
-        self.username = username
-        self.settings.setSetting("username", username)
-        if self.connexion:
-            self.connexion.send(self.turing.createMessage("username", username))
-        self.printMessage(self.translate.tr("username.changed") + username)
+        self.io_manager.startServer()
 
     def connect(self, host="127.0.0.1"):
-        if host == "last":
-            host = self.settings.getSetting("lastHost")
-        self.settings.setSetting("lastHost", host)
-        self.startClient(host)
+        self.io_manager.startClient(host)
 
     def sendMessage(self, message):
         if not self.connexion:
@@ -95,11 +70,10 @@ class TuringChat():
             self.printMessage(self.translate.tr("error.connexion.not.trusted"))
             return
         self.printMessage(self.translate.tr("user.you") + message)
-        self.connexion.send(self.turing.createMessage("message", message))
+        self.io_manager.sendMessage(message)
 
     def quit(self):
-        self.stopClient()
-        self.stopServer()
+        self.io_manager.stopAll()
         if self.sendQuit:
             self.sendQuit()
         return "quit"
