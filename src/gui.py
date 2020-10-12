@@ -17,6 +17,9 @@ def quit():
 
 
 def disc():
+    def startServer():
+        Thread(target=interface.startServer).start()
+
     global interface, msg_list
     for c in wd.winfo_children():
         c.destroy()
@@ -31,7 +34,7 @@ def disc():
     chp.pack(side=BOTTOM, pady=10, padx=100, fill="x")
     chp.bind("<FocusIn>", lambda args: chp.delete('0', 'end'))
 
-    btnSERV = Button(wd, text=tr("server.start"), font=("courrier", 22), bg="white", fg="#56646A", command=interface.startServer)
+    btnSERV = Button(wd, text=tr("server.start"), font=("courrier", 22), bg="white", fg="#56646A", command=startServer)
     btnSERV.pack(fill=X)
 
     chpIPMsg = StringVar()
@@ -39,7 +42,7 @@ def disc():
     chpIP.pack(side=BOTTOM, pady=30)
 
     def startClient(e):
-        interface.startClient(chpIPMsg.get())
+        Thread(target=interface.startClient, args=[chpIPMsg.get()]).start()
         chpIPMsg.set("")
 
     def send(e):
