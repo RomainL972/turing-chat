@@ -24,7 +24,7 @@ def disc():
     label = Label(wd, text=tr("status.connected"), font=("courrier", 22), bg="#56646A", fg="white")
     label.pack(side=TOP)
     msg_list = Text(wd, bg="#545454", fg="white", state=DISABLED)
-    
+
     msg_list.pack(expand=True, fill='both', padx=100)
     chp = Entry(wd, width=70, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
     chp.insert(0, tr("gui.message.placeholder"))
@@ -33,14 +33,21 @@ def disc():
 
     btnSERV = Button(wd, text=tr("server.start"), font=("courrier", 22), bg="white", fg="#56646A", command=interface.startServer)
     btnSERV.pack(fill=X)
-    chpIP = Entry(wd, width=20, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=msg)
+
+    chpIPMsg = StringVar()
+    chpIP = Entry(wd, width=20, font=(22), bg="#56646A", fg="white", bd=2, relief=SUNKEN, textvariable=chpIPMsg)
     chpIP.pack(side=BOTTOM, pady=30)
+
+    def startClient(e):
+        interface.startClient(chpIPMsg.get())
+        chpIPMsg.set("")
 
     def send(e):
         Thread(target=interface.parseCommand, args=[msg.get()]).start()
         msg.set("")
 
     chp.bind("<Return>", send)  # definir "send" comme envoyer le message
+    chpIP.bind("<Return>", startClient)
 
 
 def writeMsg(msg, message=False, username=None):
