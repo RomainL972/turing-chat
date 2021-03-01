@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - TIME_WAIT problem resolved using SO_REUSEADDR
+- Fixed shebang when not using standard python path
 
 ## [2.3.0] - 2020-05-29
 ### Added

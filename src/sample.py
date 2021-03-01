@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # On importe l'API de TuringChat
 from turing_chat import TuringChat
