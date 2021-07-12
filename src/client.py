@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import socket
 from connexion import Connexion
 from translate import tr
